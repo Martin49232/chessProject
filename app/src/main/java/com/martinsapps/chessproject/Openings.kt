@@ -44,7 +44,7 @@ class Openings : AppCompatActivity() {
         val greenSquareFactory = GreenSquareFactory(this, constraintLayout, chessBoard)
 
 
-        moveBackButton.setOnClickListener {
+        //moveBackButton.setOnClickListener {
             /*chessBoard.previousMovesList.removeAt(chessBoard.previousMovesList.size-1)
             chessBoard.fen=chessBoard.previousMovesList.last()
             for (piece in chessBoard.pieces){
@@ -52,7 +52,8 @@ class Openings : AppCompatActivity() {
             }
             chessBoard.pieces = mutableListOf()
             drawPieces(chessBoard.fen.toCharArray(), chessBoardStartY, 0F, squareSide.toFloat(), constraintLayout, squareSide, chessBoard, greenSquareFactory, color)*/
-        }
+        //}
+
 
         val imageView = ImageView(this)
         imageView.setImageDrawable(ContextCompat.getDrawable(this,(R.drawable.green_chess_board)))
