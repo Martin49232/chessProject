@@ -1,6 +1,7 @@
 package com.martinsapps.chessproject
 
 
+import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
@@ -44,7 +45,7 @@ class Openings : AppCompatActivity() {
         val greenSquareFactory = GreenSquareFactory(this, constraintLayout, chessBoard)
 
 
-        //moveBackButton.setOnClickListener {
+        moveBackButton.setOnClickListener {
             /*chessBoard.previousMovesList.removeAt(chessBoard.previousMovesList.size-1)
             chessBoard.fen=chessBoard.previousMovesList.last()
             for (piece in chessBoard.pieces){
@@ -52,7 +53,7 @@ class Openings : AppCompatActivity() {
             }
             chessBoard.pieces = mutableListOf()
             drawPieces(chessBoard.fen.toCharArray(), chessBoardStartY, 0F, squareSide.toFloat(), constraintLayout, squareSide, chessBoard, greenSquareFactory, color)*/
-        //}
+        }
 
 
         val imageView = ImageView(this)
@@ -86,129 +87,61 @@ class Openings : AppCompatActivity() {
     private fun drawPieces(FEN: CharArray, startY:Float, startX:Float, squareSize: Float, constraintLayout:ConstraintLayout, pieceSize: Int, chessBoard:ChessBoard, greenSquareFactory: GreenSquareFactory, color: Int){
         chessBoard.pieces = mutableListOf()
 
+        fun createPiece(type: Int): ChessPiece{
+            return ChessPiece(type, this, constraintLayout,color, chessBoard, greenSquareFactory)
+        }
+
         if (color == 0) {
             var currentSquareX = startX
             var currentSquareY = startY
             for (i in FEN.indices) {
                 try {
                     if (FEN[i] == 'r') {
-                        val piece = ChessPiece(
-                            ChessPiece.BLACK_ROOK,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.BLACK_ROOK).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'n') {
-                        val piece = ChessPiece(
-                            ChessPiece.BLACK_KNIGHT,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.BLACK_KNIGHT).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'b') {
-                        val piece = ChessPiece(
-                            ChessPiece.BLACK_BISHOP,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.BLACK_BISHOP).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'q') {
-                        val piece = ChessPiece(
-                            ChessPiece.BLACK_QUEEN,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.BLACK_QUEEN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'k') {
-                        val piece = ChessPiece(
-                            ChessPiece.BLACK_KING,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.BLACK_KING).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'p') {
-                        val piece = ChessPiece(
-                            ChessPiece.BLACK_PAWN,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.BLACK_PAWN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'R') {
-                        val piece = ChessPiece(
-                            ChessPiece.WHITE_ROOK,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.WHITE_ROOK).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'N') {
-                        val piece = ChessPiece(
-                            ChessPiece.WHITE_KNIGHT,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.WHITE_KNIGHT).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'B') {
-                        val piece = ChessPiece(
-                            ChessPiece.WHITE_BISHOP,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.WHITE_BISHOP).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'Q') {
-                        val piece = ChessPiece(
-                            ChessPiece.WHITE_QUEEN,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.WHITE_QUEEN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'K') {
-                        val piece = ChessPiece(
-                            ChessPiece.WHITE_KING,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.WHITE_KING).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'P') {
-                        val piece = ChessPiece(
-                            ChessPiece.WHITE_PAWN,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.WHITE_PAWN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == '/') {
@@ -231,123 +164,51 @@ class Openings : AppCompatActivity() {
             for (i in FEN.indices) {
                 try {
                     if (FEN[i] == 'r') {
-                        val piece = ChessPiece(
-                            ChessPiece.BLACK_ROOK,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.BLACK_ROOK).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'n') {
-                        val piece = ChessPiece(
-                            ChessPiece.BLACK_KNIGHT,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.BLACK_KNIGHT).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'b') {
-                        val piece = ChessPiece(
-                            ChessPiece.BLACK_BISHOP,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.BLACK_BISHOP).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'q') {
-                        val piece = ChessPiece(
-                            ChessPiece.BLACK_QUEEN,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.BLACK_QUEEN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'k') {
-                        val piece = ChessPiece(
-                            ChessPiece.BLACK_KING,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.BLACK_KING).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'p') {
-                        val piece = ChessPiece(
-                            ChessPiece.BLACK_PAWN,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.BLACK_PAWN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'R') {
-                        val piece = ChessPiece(
-                            ChessPiece.WHITE_ROOK,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.WHITE_ROOK).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'N') {
-                        val piece = ChessPiece(
-                            ChessPiece.WHITE_KNIGHT,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.WHITE_KNIGHT).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'B') {
-                        val piece = ChessPiece(
-                            ChessPiece.WHITE_BISHOP,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.WHITE_BISHOP).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'Q') {
-                        val piece = ChessPiece(
-                            ChessPiece.WHITE_QUEEN,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.WHITE_QUEEN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'K') {
-                        val piece = ChessPiece(
-                            ChessPiece.WHITE_KING,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.WHITE_KING).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == 'P') {
-                        val piece = ChessPiece(
-                            ChessPiece.WHITE_PAWN,
-                            this,
-                            constraintLayout,color,
-                            chessBoard,
-                            greenSquareFactory
-                        ).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                        val piece = createPiece(ChessPiece.WHITE_PAWN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
                     if (FEN[i] == '/') {
