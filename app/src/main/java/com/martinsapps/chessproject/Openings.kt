@@ -6,6 +6,7 @@ import android.content.res.Resources
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
@@ -29,7 +30,10 @@ class Openings : AppCompatActivity() {
         val moveBackButton = findViewById<Button>(R.id.moveBack)
         val moveForwardButton = findViewById<Button>(R.id.moveForward)
 
-        val backButton = findViewById<Button>(R.id.back)
+        val hintButton = findViewById<ImageButton>(R.id.hint)
+
+
+        val backButton = findViewById<ImageView>(R.id.back)
         backButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             this.startActivity(intent)
@@ -114,7 +118,6 @@ class Openings : AppCompatActivity() {
 
     private fun drawPieces(FEN: CharArray, startY:Float, startX:Float, squareSize: Float, constraintLayout:ConstraintLayout, pieceSize: Int, chessBoard:ChessBoard, greenSquareFactory: GreenSquareFactory, color: Int){
         chessBoard.pieces = mutableListOf()
-
         fun createPiece(type: Int): ChessPiece{
             return ChessPiece(type, this, constraintLayout,color, chessBoard, greenSquareFactory)
         }
@@ -123,137 +126,136 @@ class Openings : AppCompatActivity() {
             var currentSquareX = startX
             var currentSquareY = startY
             for (i in FEN.indices) {
-                try {
-                    if (FEN[i] == 'r') {
+                    if(FEN[i] == ' '){
+                        break
+                    }
+                    else if (FEN[i] == 'r') {
                         val piece = createPiece(ChessPiece.BLACK_ROOK).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'n') {
+                    else if  (FEN[i] == 'n') {
                         val piece = createPiece(ChessPiece.BLACK_KNIGHT).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'b') {
+                    else if  (FEN[i] == 'b') {
                         val piece = createPiece(ChessPiece.BLACK_BISHOP).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'q') {
+                    else if  (FEN[i] == 'q') {
                         val piece = createPiece(ChessPiece.BLACK_QUEEN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'k') {
+                    else if  (FEN[i] == 'k') {
                         val piece = createPiece(ChessPiece.BLACK_KING).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'p') {
+                    else if  (FEN[i] == 'p') {
                         val piece = createPiece(ChessPiece.BLACK_PAWN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'R') {
+                    else if  (FEN[i] == 'R') {
                         val piece = createPiece(ChessPiece.WHITE_ROOK).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'N') {
+                    else if  (FEN[i] == 'N') {
                         val piece = createPiece(ChessPiece.WHITE_KNIGHT).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'B') {
+                    else if  (FEN[i] == 'B') {
                         val piece = createPiece(ChessPiece.WHITE_BISHOP).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'Q') {
+                    else if  (FEN[i] == 'Q') {
                         val piece = createPiece(ChessPiece.WHITE_QUEEN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'K') {
+                    else if  (FEN[i] == 'K') {
                         val piece = createPiece(ChessPiece.WHITE_KING).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'P') {
+                    else if  (FEN[i] == 'P') {
                         val piece = createPiece(ChessPiece.WHITE_PAWN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == '/') {
+                    else if  (FEN[i] == '/') {
                         currentSquareY += squareSize
                         currentSquareX = startX
                         continue
                     }
-                    if (FEN[i].isDigit()) {
+                    else if  (FEN[i].isDigit()) {
                         for (j in FEN[i].digitToInt() downTo 2) {
                             currentSquareX += squareSize
                         }
                     }
                     currentSquareX += squareSize
-                } catch (_: ArrayIndexOutOfBoundsException) {
                 }
-            }
         }else{
             var currentSquareX = startX+getScreenWidth()-getScreenWidth()/8
             var currentSquareY = startY+getScreenWidth()-getScreenWidth()/8
             for (i in FEN.indices) {
-                try {
-                    if (FEN[i] == 'r') {
+                    if(FEN[i] == ' '){
+                        break
+                    }
+                    else if  (FEN[i] == 'r') {
                         val piece = createPiece(ChessPiece.BLACK_ROOK).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'n') {
+                    else if  (FEN[i] == 'n') {
                         val piece = createPiece(ChessPiece.BLACK_KNIGHT).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'b') {
+                    else if  (FEN[i] == 'b') {
                         val piece = createPiece(ChessPiece.BLACK_BISHOP).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'q') {
+                    else if  (FEN[i] == 'q') {
                         val piece = createPiece(ChessPiece.BLACK_QUEEN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'k') {
+                    else if  (FEN[i] == 'k') {
                         val piece = createPiece(ChessPiece.BLACK_KING).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'p') {
+                    else if  (FEN[i] == 'p') {
                         val piece = createPiece(ChessPiece.BLACK_PAWN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'R') {
+                    else if  (FEN[i] == 'R') {
                         val piece = createPiece(ChessPiece.WHITE_ROOK).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'N') {
+                    else if  (FEN[i] == 'N') {
                         val piece = createPiece(ChessPiece.WHITE_KNIGHT).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'B') {
+                    else if  (FEN[i] == 'B') {
                         val piece = createPiece(ChessPiece.WHITE_BISHOP).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'Q') {
+                    else if  (FEN[i] == 'Q') {
                         val piece = createPiece(ChessPiece.WHITE_QUEEN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'K') {
+                    else if  (FEN[i] == 'K') {
                         val piece = createPiece(ChessPiece.WHITE_KING).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == 'P') {
+                    else if  (FEN[i] == 'P') {
                         val piece = createPiece(ChessPiece.WHITE_PAWN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
                         chessBoard.pieces.add(piece)
                     }
-                    if (FEN[i] == '/') {
+                    else if  (FEN[i] == '/') {
                         currentSquareY -= squareSize
                         currentSquareX = startX+getScreenWidth()-getScreenWidth()/8
                         continue
                     }
-                    if (FEN[i].isDigit()) {
+                    else if  (FEN[i].isDigit()) {
                         for (j in FEN[i].digitToInt() downTo 2) {
                             currentSquareX -= squareSize
                         }
                     }
                     currentSquareX -= squareSize
-                } catch (_: ArrayIndexOutOfBoundsException) {
                 }
-            }
-
         }
     }
 
