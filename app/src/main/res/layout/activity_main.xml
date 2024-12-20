@@ -15,7 +15,7 @@
         android:gravity="center"
         android:orientation="vertical"
         android:padding="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/bottomLinearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,8 +38,8 @@
 
             <ImageButton
                 android:id="@+id/white"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
                 android:backgroundTint="#666666"
                 android:padding="13dp"
                 android:scaleType="fitCenter"
@@ -75,8 +75,8 @@
 
             <ImageButton
                 android:id="@+id/black"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
                 android:backgroundTint="#666666"
                 android:padding="13dp"
                 android:scaleType="fitCenter"
@@ -98,7 +98,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/bottomLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:layout_margin="0dp"
@@ -112,20 +112,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
-
-        <Button
-            android:id="@+id/add_opening"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:width="320dp"
-            android:height="55dp"
-            android:backgroundTint="@color/button"
-            android:fontFamily="sans-serif"
-            android:padding="0dp"
-            android:text="Add Opening"
-            android:textColor="@color/white"
-            android:textSize="14dp"
-            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -150,7 +136,7 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/lastPlayed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -167,6 +153,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/titleLayout"
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:background="@color/panel"
@@ -177,7 +164,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0.025">
 
         <TextView
             android:id="@+id/title"
