@@ -40,6 +40,8 @@ class Openings : AppCompatActivity() {
         }
 
         val intent = intent
+        //white is 0
+        //black is 1
         val color = intent.getIntExtra("Color", 0)
 
         val screenRatio = screenWidth.toFloat()/screenHeight.toFloat()
@@ -88,12 +90,21 @@ class Openings : AppCompatActivity() {
         }
 
 
-        val imageView = ImageView(this)
-        imageView.setImageDrawable(ContextCompat.getDrawable(this,(R.drawable.green_chess_board)))
-        constraintLayout.addView(imageView)
-        imageView.y = chessBoardStartY
-        imageView.layoutParams.height = screenWidth
-        imageView.layoutParams.width = screenWidth
+        if (color == 0){
+            val imageView = ImageView(this)
+            imageView.setImageDrawable(ContextCompat.getDrawable(this,(R.drawable.vibrantchessboard)))
+            constraintLayout.addView(imageView)
+            imageView.y = chessBoardStartY
+            imageView.layoutParams.height = screenWidth
+            imageView.layoutParams.width = screenWidth}
+        else{
+            val imageView = ImageView(this)
+            imageView.setImageDrawable(ContextCompat.getDrawable(this,(R.drawable.vibrantchessboardopposite)))
+            constraintLayout.addView(imageView)
+            imageView.y = chessBoardStartY
+            imageView.layoutParams.height = screenWidth
+            imageView.layoutParams.width = screenWidth}
+
 
 
         val FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
@@ -105,7 +116,7 @@ class Openings : AppCompatActivity() {
         val window = this.window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.statusBarColor = this.resources.getColor(R.color.black)
+        window.statusBarColor = this.resources.getColor(R.color.panel)
     }
 
     private fun getScreenWidth(): Int {
