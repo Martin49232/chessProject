@@ -20,6 +20,7 @@ class ChessBoard(color: Int) {
     var pieces: MutableList<ImageView>
     val color: Int
     var previousMovesList = mutableListOf<String>()
+    var previousMovesMovedBackList = mutableListOf<String>()
     //true for white false for black
     var turn = true
 
@@ -43,7 +44,7 @@ class ChessBoard(color: Int) {
         this.startY= round((getScreenHeight()/(screenRatio*7)))
         this.startX = 0F
         this.squareSize = (getScreenWidth()/8)
-        this.squareCoordinates = squareCoordinates(startY.toFloat(), startX.toFloat(), squareSize.toFloat())
+        this.squareCoordinates = squareCoordinates(startY, startX, squareSize.toFloat())
         this.fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - "
         this.pieceClicked = null
         this.clickedPieceCoordinates = IntArray(2)
@@ -145,11 +146,7 @@ class ChessBoard(color: Int) {
         return intArrayOf(corX, corY)
     }
     fun outOfBounds(x:Int, y:Int): Boolean{
-        if (x > getScreenWidth() || x < 0 || y < startY || y > startY+getScreenWidth()){
-            println(startY)
-            return true
-        }
-        return false
+        return x > getScreenWidth() || x < 0 || y < startY || y > startY+getScreenWidth()
     }
     fun createGreenSquare(context:Context, x:Float, y:Float, size:Int, constraintLayout: ConstraintLayout): ImageView{
         removeGreenSquare(constraintLayout)
@@ -238,7 +235,12 @@ class ChessBoard(color: Int) {
             }
 
         fen+=" "
-        fen += if (turn){ "w" }else{ "b" }
+        fen += if (turn) {
+            "w"
+        } else{
+            "b"
+        }
+        //println(turn)
         fen+=" "
 
 

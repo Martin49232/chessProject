@@ -66,6 +66,14 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
 
     @SuppressLint("ClickableViewAccessibility")
     private fun makePieceClickable() {
+        fun movingPiece(){
+            squareFactory.removeSquares()
+            chessBoard.removeGreenSquare(constraintLayout)
+            chessBoard.turn = !chessBoard.turn
+            println(chessBoard.turn)
+            chessBoard.fen = chessBoard.generateFen(color)
+            chessBoard.previousMovesMovedBackList = mutableListOf()
+        }
         imageView.setOnClickListener {
 
             chessBoard.greenSquareImageView = chessBoard.createGreenSquare(
@@ -122,10 +130,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                                 imageView.x = chessBoard.pieceClicked!!.x +chessBoard.squareSize
                                 imageView.y = chessBoard.pieceClicked!!.y
                                 chessBoard.pieceClicked!!.x += 2*chessBoard.squareSize
-                                squareFactory.removeSquares()
-                                chessBoard.removeGreenSquare(constraintLayout)
-                                chessBoard.turn = !chessBoard.turn
-                                chessBoard.fen = chessBoard.generateFen(color)
+                                movingPiece()
                                 return@setOnClickListener
                             }
 
@@ -133,10 +138,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                                 imageView.x = chessBoard.pieceClicked!!.x -chessBoard.squareSize
                                 imageView.y = chessBoard.pieceClicked!!.y
                                 chessBoard.pieceClicked!!.x -= 2*chessBoard.squareSize
-                                squareFactory.removeSquares()
-                                chessBoard.removeGreenSquare(constraintLayout)
-                                chessBoard.turn = !chessBoard.turn
-                                chessBoard.fen = chessBoard.generateFen(color)
+                                movingPiece()
                                 return@setOnClickListener
                             }
 
@@ -144,10 +146,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                                 imageView.x = chessBoard.pieceClicked!!.x -chessBoard.squareSize
                                 imageView.y = chessBoard.pieceClicked!!.y
                                 chessBoard.pieceClicked!!.x -= 2*chessBoard.squareSize
-                                squareFactory.removeSquares()
-                                chessBoard.removeGreenSquare(constraintLayout)
-                                chessBoard.turn = !chessBoard.turn
-                                chessBoard.fen = chessBoard.generateFen(color)
+                                movingPiece()
                                 return@setOnClickListener
                             }
 
@@ -155,10 +154,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                                 imageView.x = chessBoard.pieceClicked!!.x +chessBoard.squareSize
                                 imageView.y = chessBoard.pieceClicked!!.y
                                 chessBoard.pieceClicked!!.x += 2*chessBoard.squareSize
-                                squareFactory.removeSquares()
-                                chessBoard.removeGreenSquare(constraintLayout)
-                                chessBoard.turn = !chessBoard.turn
-                                chessBoard.fen = chessBoard.generateFen(color)
+                                movingPiece()
                                 return@setOnClickListener
                             }
 
@@ -173,15 +169,9 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                                 }
                             }
                             removePiece()
-
-                            chessBoard.turn = !chessBoard.turn
-                            chessBoard.fen = chessBoard.generateFen(color)
-
                             constraintLayout.setOnTouchListener(null)
                             chessBoard.pieceClicked = null
-
-                            squareFactory.removeSquares()
-                            chessBoard.removeGreenSquare(constraintLayout)
+                            movingPiece()
                             return@setOnClickListener
                         }
                     }
@@ -208,6 +198,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                                     )
                                     chessBoard.turn = !chessBoard.turn
                                     chessBoard.fen = chessBoard.generateFen(color)
+                                    chessBoard.previousMovesMovedBackList = mutableListOf()
                                 }
                             }
                         }

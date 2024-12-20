@@ -1,14 +1,12 @@
 package com.martinsapps.chessproject
 
 
-import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -46,13 +44,35 @@ class Openings : AppCompatActivity() {
 
 
         moveBackButton.setOnClickListener {
-            /*chessBoard.previousMovesList.removeAt(chessBoard.previousMovesList.size-1)
-            chessBoard.fen=chessBoard.previousMovesList.last()
-            for (piece in chessBoard.pieces){
-                constraintLayout.removeView(piece)
+            if(chessBoard.previousMovesList.size-1>0) {
+                chessBoard.previousMovesMovedBackList.add(chessBoard.previousMovesList.removeAt(chessBoard.previousMovesList.size-1))
+                chessBoard.fen=chessBoard.previousMovesList.last()
+                for (piece in chessBoard.pieces){
+                    constraintLayout.removeView(piece)
+                }
+                chessBoard.pieces = mutableListOf()
+                greenSquareFactory.removeSquares()
+                chessBoard.removeGreenSquare(constraintLayout)
+                val splitFen = chessBoard.fen.split(" ")
+                chessBoard.turn = splitFen[1] == "w"
+                drawPieces(chessBoard.fen.toCharArray(), chessBoardStartY, 0F, squareSide.toFloat(), constraintLayout, squareSide, chessBoard, greenSquareFactory, color)
             }
-            chessBoard.pieces = mutableListOf()
-            drawPieces(chessBoard.fen.toCharArray(), chessBoardStartY, 0F, squareSide.toFloat(), constraintLayout, squareSide, chessBoard, greenSquareFactory, color)*/
+        }
+
+        moveForwardButton.setOnClickListener {
+            if(chessBoard.previousMovesMovedBackList.size>0){
+                chessBoard.fen= chessBoard.previousMovesMovedBackList.removeAt(chessBoard.previousMovesMovedBackList.size-1)
+                chessBoard.previousMovesList.add(chessBoard.fen)
+                for (piece in chessBoard.pieces){
+                    constraintLayout.removeView(piece)
+                }
+                chessBoard.pieces = mutableListOf()
+                greenSquareFactory.removeSquares()
+                chessBoard.removeGreenSquare(constraintLayout)
+                val splitFen = chessBoard.fen.split(" ")
+                chessBoard.turn = splitFen[1] == "w"
+                drawPieces(chessBoard.fen.toCharArray(), chessBoardStartY, 0F, squareSide.toFloat(), constraintLayout, squareSide, chessBoard, greenSquareFactory, color)
+            }
         }
 
 
