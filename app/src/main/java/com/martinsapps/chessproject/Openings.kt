@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -20,6 +22,7 @@ class Openings : AppCompatActivity() {
         val constraintLayout = findViewById<ConstraintLayout>(R.id.cl)
         val screenWidth = getScreenWidth()
         val screenHeight = getScreenHeight()
+        enableEdgeToEdge()
         supportActionBar?.hide()
         changeTheAnnoyingBar()
 
@@ -41,6 +44,11 @@ class Openings : AppCompatActivity() {
 
         val chessBoard = ChessBoard(color)
         val greenSquareFactory = GreenSquareFactory(this, constraintLayout, chessBoard)
+
+        val titleLayout = findViewById<LinearLayout>(R.id.titleLayout)
+        titleLayout.requestLayout()
+        titleLayout.layoutParams.width = screenWidth
+        titleLayout.layoutParams.height = screenHeight/8
 
 
         moveBackButton.setOnClickListener {
