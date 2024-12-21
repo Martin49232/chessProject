@@ -16,7 +16,7 @@ class SoundPlayer(context: Context) {
         preloadSounds(context)
     }
 
-    //adaw
+    //adaws
     private fun preloadSounds(context: Context) {
 
         moveSound = soundPool.load(context, R.raw.move, 1)
