@@ -40,7 +40,7 @@
                 android:id="@+id/white"
                 android:layout_width="1dp"
                 android:layout_height="1dp"
-                android:backgroundTint="#666666"
+                android:backgroundTint="#444444"
                 android:padding="13dp"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/white_openings" />
@@ -77,7 +77,7 @@
                 android:id="@+id/black"
                 android:layout_width="1dp"
                 android:layout_height="1dp"
-                android:backgroundTint="#666666"
+                android:backgroundTint="#444444"
                 android:padding="13dp"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/black_openings" />

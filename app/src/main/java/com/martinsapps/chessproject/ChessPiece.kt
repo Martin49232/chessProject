@@ -70,12 +70,12 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
             squareFactory.removeSquares()
             chessBoard.removeGreenSquare(constraintLayout)
             chessBoard.turn = !chessBoard.turn
-            println(chessBoard.turn)
             chessBoard.fen = chessBoard.generateFen(color)
             chessBoard.previousMovesMovedBackList = mutableListOf()
         }
-        imageView.setOnClickListener {
 
+        imageView.setOnClickListener {
+            squareFactory.removeSquares()
             chessBoard.greenSquareImageView = chessBoard.createGreenSquare(
                 context,
                 imageView.x,
@@ -84,7 +84,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                 constraintLayout
             )
 
-            squareFactory.removeSquares()
+            //squareFactory.removeSquares()
 
             //prints the green squares
             chessBoard.moves = chessBoard.pseudoLegalMoves(chessBoard.fen)
@@ -131,6 +131,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                                 imageView.y = chessBoard.pieceClicked!!.y
                                 chessBoard.pieceClicked!!.x += 2*chessBoard.squareSize
                                 movingPiece()
+                                chessBoard.soundPlayer.playMoveSound()
                                 return@setOnClickListener
                             }
 
@@ -139,6 +140,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                                 imageView.y = chessBoard.pieceClicked!!.y
                                 chessBoard.pieceClicked!!.x -= 2*chessBoard.squareSize
                                 movingPiece()
+                                chessBoard.soundPlayer.playMoveSound()
                                 return@setOnClickListener
                             }
 
@@ -147,6 +149,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                                 imageView.y = chessBoard.pieceClicked!!.y
                                 chessBoard.pieceClicked!!.x -= 2*chessBoard.squareSize
                                 movingPiece()
+                                chessBoard.soundPlayer.playMoveSound()
                                 return@setOnClickListener
                             }
 
@@ -155,6 +158,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                                 imageView.y = chessBoard.pieceClicked!!.y
                                 chessBoard.pieceClicked!!.x += 2*chessBoard.squareSize
                                 movingPiece()
+                                chessBoard.soundPlayer.playMoveSound()
                                 return@setOnClickListener
                             }
 
@@ -172,12 +176,47 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                             constraintLayout.setOnTouchListener(null)
                             chessBoard.pieceClicked = null
                             movingPiece()
+                            chessBoard.soundPlayer.playCaptureSound()
                             return@setOnClickListener
                         }
                     }
                 }
+
+
                 squareFactory.removeSquares()
                 chessBoard.removeGreenSquare(constraintLayout)
+
+                chessBoard.pieceClicked = imageView
+                chessBoard.greenSquareImageView = chessBoard.createGreenSquare(
+                    context,
+                    imageView.x,
+                    imageView.y,
+                    imageView.layoutParams.height,
+                    constraintLayout
+                )
+                chessBoard.moves = chessBoard.pseudoLegalMoves(chessBoard.fen)
+                val pseudoLegalMoves = mutableListOf<Move>()
+                var position = 0
+                for (i in 0 until chessBoard.squareCoordinates.size) {
+                    if (this.imageView.x.toInt() == chessBoard.squareCoordinates[i][0] && this.imageView.y.toInt() == chessBoard.squareCoordinates[i][1]) {
+                        position = i
+                    }
+                }
+                //printing legal moves signs
+                for (move in chessBoard.moves) {
+                    if (move.from == position) {
+                        pseudoLegalMoves.add(move)
+                        when(move.flag){
+                            Move.QUIET_MOVES->squareFactory.addDot(move.where)
+                            Move.DOUBLE_PAWN_PUSH->squareFactory.addDot(move.where)
+                            Move.CAPTURES->squareFactory.addHollowCircle(move.where)
+                            Move.KING_CASTLE->squareFactory.addHollowCircle(move.where)
+                            Move.QUEEN_CASTLE->squareFactory.addHollowCircle(move.where)
+                            //TODO rest
+                        }
+
+                    }
+                }
             }
             chessBoard.pieceClicked = imageView
 
@@ -198,6 +237,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                                     )
                                     chessBoard.turn = !chessBoard.turn
                                     chessBoard.fen = chessBoard.generateFen(color)
+                                    chessBoard.soundPlayer.playMoveSound()
                                     chessBoard.previousMovesMovedBackList = mutableListOf()
                                 }
                             }
