@@ -3,12 +3,15 @@ package com.martinsapps.chessproject
 
 import android.content.Intent
 import android.content.res.Resources
+import android.media.Image
 import android.os.Bundle
+import android.transition.Explode
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -17,9 +20,13 @@ import kotlin.math.round
 
 
 class Openings : AppCompatActivity() {
+    private lateinit var chessBoard: ChessBoard
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.openings_layout)
+        overridePendingTransition(androidx.appcompat.R.anim.abc_popup_enter, androidx.appcompat.R.anim.abc_popup_exit)
+
         val constraintLayout = findViewById<ConstraintLayout>(R.id.cl)
         val screenWidth = getScreenWidth()
         val screenHeight = getScreenHeight()
@@ -38,7 +45,6 @@ class Openings : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             this.startActivity(intent)
         }
-
         val intent = intent
         //white is 0
         //black is 1
@@ -48,13 +54,27 @@ class Openings : AppCompatActivity() {
         val chessBoardStartY= round((screenHeight/(screenRatio*7)))
         val squareSide = screenWidth/8
 
-        val chessBoard = ChessBoard(color)
+        chessBoard = ChessBoard(color, this)
         val greenSquareFactory = GreenSquareFactory(this, constraintLayout, chessBoard)
 
         val titleLayout = findViewById<LinearLayout>(R.id.titleLayout)
         titleLayout.requestLayout()
         titleLayout.layoutParams.width = screenWidth
         titleLayout.layoutParams.height = screenHeight/8
+
+        backButton.requestLayout()
+        backButton.layoutParams.width = screenWidth/4
+        backButton.layoutParams.height = screenWidth/4
+
+        val title = findViewById<TextView>(R.id.title)
+        title.requestLayout()
+        title.layoutParams.width = screenWidth/2
+        title.layoutParams.height = screenHeight/19
+
+        val logo = findViewById<ImageView>(R.id.logo)
+        logo.requestLayout()
+        logo.layoutParams.width = screenWidth/4
+        logo.layoutParams.height = screenWidth/4
 
 
         moveBackButton.setOnClickListener {
@@ -66,6 +86,7 @@ class Openings : AppCompatActivity() {
                 }
                 chessBoard.pieces = mutableListOf()
                 greenSquareFactory.removeSquares()
+                chessBoard.soundPlayer.playMoveSound()
                 chessBoard.removeGreenSquare(constraintLayout)
                 val splitFen = chessBoard.fen.split(" ")
                 chessBoard.turn = splitFen[1] == "w"
@@ -81,6 +102,7 @@ class Openings : AppCompatActivity() {
                     constraintLayout.removeView(piece)
                 }
                 chessBoard.pieces = mutableListOf()
+                chessBoard.soundPlayer.playMoveSound()
                 greenSquareFactory.removeSquares()
                 chessBoard.removeGreenSquare(constraintLayout)
                 val splitFen = chessBoard.fen.split(" ")
@@ -111,6 +133,11 @@ class Openings : AppCompatActivity() {
 
         drawPieces(FEN.toCharArray(), chessBoardStartY, 0F, squareSide.toFloat(), constraintLayout, squareSide, chessBoard, greenSquareFactory, color)
         chessBoard.generateFen(color)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        chessBoard.soundPlayer.release()
     }
     private fun changeTheAnnoyingBar(){
         val window = this.window

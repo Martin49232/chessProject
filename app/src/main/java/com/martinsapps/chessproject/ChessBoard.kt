@@ -7,7 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import kotlin.math.round
 
-class ChessBoard(color: Int) {
+class ChessBoard(color: Int, context: Context) {
 
     val squareCoordinates: Array<IntArray>
     val startY:Float
@@ -33,6 +33,8 @@ class ChessBoard(color: Int) {
 
     //en passant square
     var enPassantSquare = false
+
+    val soundPlayer = SoundPlayer(context)
 
 
     var moves: MutableList<Move> = mutableListOf()

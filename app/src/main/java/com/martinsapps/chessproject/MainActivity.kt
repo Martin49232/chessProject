@@ -6,6 +6,7 @@ import android.graphics.Point
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.transition.Explode
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Button
@@ -29,8 +30,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-
-        val window = this.window
+        // Set the enter and exit transitions
+        overridePendingTransition(androidx.appcompat.R.anim.abc_popup_enter, androidx.appcompat.R.anim.abc_popup_exit)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.statusBarColor = this.resources.getColor(R.color.panel)
