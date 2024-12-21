@@ -6,7 +6,7 @@ import android.media.SoundPool
 class SoundPlayer(context: Context) {
 
     private val soundPool: SoundPool = SoundPool.Builder()
-        .setMaxStreams(2) // Maximum simultaneous sounds
+        .setMaxStreams(2)
         .build()
 
     private var moveSound: Int = 0
@@ -15,10 +15,7 @@ class SoundPlayer(context: Context) {
     init {
         preloadSounds(context)
     }
-
-    //adaws
     private fun preloadSounds(context: Context) {
-
         moveSound = soundPool.load(context, R.raw.move, 1)
         captureSound = soundPool.load(context, R.raw.capture, 1)
     }
