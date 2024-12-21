@@ -61,6 +61,17 @@ class MainActivity : AppCompatActivity() {
         titleLayout.layoutParams.width = screenWidth
         titleLayout.layoutParams.height = screenHeight/8
 
+        val title = findViewById<TextView>(R.id.title)
+        //title.requestLayout()
+        //title.layoutParams.width = screenWidth/2
+        //title.layoutParams.height = screenHeight/20
+
+        //val logo = findViewById<ImageView>(R.id.logo)
+        //logo.requestLayout()
+        //logo.layoutParams.width = screenWidth/4
+        //logo.layoutParams.height = screenWidth/4
+
+
         bottomLayout.requestLayout()
         bottomLayout.layoutParams.width = screenWidth
         bottomLayout.layoutParams.height = screenHeight/8
