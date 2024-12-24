@@ -39,16 +39,20 @@ class Openings : AppCompatActivity() {
 
         val hintButton = findViewById<ImageButton>(R.id.hint)
 
+        val color = intent.getIntExtra("color", 0)
+        val dbOpeningName = intent.getStringExtra("opening")
+        val openingName = intent.getStringExtra("name")
 
         val backButton = findViewById<ImageView>(R.id.back)
         backButton.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, OpeningsRoot::class.java)
+            intent.putExtra("color", color)
             this.startActivity(intent)
         }
-        val intent = intent
+        //val intent = intent
         //white is 0
         //black is 1
-        val color = intent.getIntExtra("Color", 0)
+
 
         val screenRatio = screenWidth.toFloat()/screenHeight.toFloat()
         val chessBoardStartY= round((screenHeight/(screenRatio*7)))
