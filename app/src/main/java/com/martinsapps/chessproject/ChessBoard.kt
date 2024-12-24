@@ -2,12 +2,15 @@ package com.martinsapps.chessproject
 
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.Point
+import android.os.Build
+import android.view.WindowInsets
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import kotlin.math.round
 
-class ChessBoard(color: Int, context: Context) {
+class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: Int) {
 
     val squareCoordinates: Array<IntArray>
     val startY:Float
@@ -19,6 +22,8 @@ class ChessBoard(color: Int, context: Context) {
     var greenSquareImageView:ImageView?
     var pieces: MutableList<ImageView>
     val color: Int
+    val screenHeight: Int
+    val screenWidth: Int
     var previousMovesList = mutableListOf<String>()
     var previousMovesMovedBackList = mutableListOf<String>()
     //true for white false for black
@@ -41,11 +46,12 @@ class ChessBoard(color: Int, context: Context) {
 
     init {
         this.color = color
-        val screenRatio = getScreenWidth().toFloat()/getScreenHeight().toFloat()
-
-        this.startY= round((getScreenHeight()/(screenRatio*7)))
+        val screenRatio = screenWidth.toFloat()/screenHeight.toFloat()
+        this.screenWidth = screenWidth
+        this.screenHeight=screenHeight
+        this.startY= round((screenHeight/(screenRatio*7)))
         this.startX = 0F
-        this.squareSize = (getScreenWidth()/8)
+        this.squareSize = (screenWidth/8)
         this.squareCoordinates = squareCoordinates(startY, startX, squareSize.toFloat())
         this.fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - "
         this.pieceClicked = null
@@ -89,16 +95,6 @@ class ChessBoard(color: Int, context: Context) {
         init {
             System.loadLibrary("chessproject")
         }
-    }
-
-
-
-    private fun getScreenWidth(): Int {
-        return Resources.getSystem().displayMetrics.widthPixels
-    }
-
-    private fun getScreenHeight(): Int {
-        return Resources.getSystem().displayMetrics.heightPixels
     }
 
     private fun squareCoordinates(startY: Float, startX: Float, squareSize: Float): Array<IntArray> {
@@ -148,7 +144,7 @@ class ChessBoard(color: Int, context: Context) {
         return intArrayOf(corX, corY)
     }
     fun outOfBounds(x:Int, y:Int): Boolean{
-        return x > getScreenWidth() || x < 0 || y < startY || y > startY+getScreenWidth()
+        return x > screenWidth || x < 0 || y < startY || y > startY+screenHeight
     }
     fun createGreenSquare(context:Context, x:Float, y:Float, size:Int, constraintLayout: ConstraintLayout): ImageView{
         removeGreenSquare(constraintLayout)
@@ -167,13 +163,22 @@ class ChessBoard(color: Int, context: Context) {
 
     fun generateFen(color: Int): String{
         var fen = ""
+
+        for(i in squareCoordinates){
+            println(i[1])
+        }
+        for (i in pieces){
+            println(i.y)
+        }
         if (color == 0) {
             var emptySquareCounter = 0
             var added = 1
 
             for (i in squareCoordinates.indices) {
                 for (j in pieces.indices) {
-                    if (squareCoordinates[i][0].toFloat() == pieces[j].x && squareCoordinates[i][1].toFloat() == pieces[j].y) {
+                    //println(squareCoordinates[i][1])
+                    //println(pieces[j].y.toInt())
+                    if (squareCoordinates[i][0] == pieces[j].x.toInt() && squareCoordinates[i][1] == pieces[j].y.toInt()) {
                         if (emptySquareCounter != 0) {
                             val character = (emptySquareCounter + 48).toChar()
                             fen += character

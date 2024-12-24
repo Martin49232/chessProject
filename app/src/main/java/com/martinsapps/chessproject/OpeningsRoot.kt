@@ -70,11 +70,33 @@ class OpeningsRoot : AppCompatActivity() {
         val screenWidth = getScreenWidth()
         val screenHeight = getScreenHeight()
 
-        val cl = findViewById<ConstraintLayout>(R.id.constraintLayout)
-        val sv = findViewById<ScrollView>(R.id.scrollView)
+        //val cl = findViewById<ConstraintLayout>(R.id.constraintLayout)
+        //val sv = findViewById<ScrollView>(R.id.scrollView)
         val scrollViewLinearLayout = findViewById<LinearLayout>(R.id.scrollViewLinearLayout)
 
-        val buttonList = mutableListOf<ImageButton>()
+        //val buttonList = mutableListOf<ImageButton>()
+
+        val titleLayout = findViewById<LinearLayout>(R.id.titleLayout)
+        titleLayout.requestLayout()
+        titleLayout.layoutParams.width = screenWidth
+        titleLayout.layoutParams.height = screenHeight/8
+
+        backButton.requestLayout()
+        backButton.layoutParams.width = screenWidth/4
+        backButton.layoutParams.height = screenWidth/4
+
+        val title = findViewById<TextView>(R.id.title)
+        title.requestLayout()
+        title.textSize = 32F
+        title.layoutParams.width = screenWidth/2
+        title.layoutParams.height = screenHeight/8
+
+        val logo = findViewById<ImageView>(R.id.logo)
+        logo.requestLayout()
+        logo.layoutParams.width = screenWidth/4
+        logo.layoutParams.height = screenWidth/4
+
+
         // Loop through items, adding rows of two
         for (i in openings.indices step 2) {
             // Create a horizontal row
@@ -94,7 +116,7 @@ class OpeningsRoot : AppCompatActivity() {
 
             // Add second item to the row if it exists
             if (i + 1 < openings.size) {
-                rowLayout.addView(createItemView(openings[i]))
+                rowLayout.addView(createItemView(openings[i+1]))
             } else {
                 //Add an empty spacer to balance the row
                 rowLayout.addView(spacerView(this))
