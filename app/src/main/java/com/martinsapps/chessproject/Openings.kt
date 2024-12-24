@@ -3,9 +3,12 @@ package com.martinsapps.chessproject
 
 import android.content.Intent
 import android.content.res.Resources
+import android.graphics.Point
 import android.media.Image
+import android.os.Build
 import android.os.Bundle
 import android.transition.Explode
+import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageButton
@@ -58,7 +61,7 @@ class Openings : AppCompatActivity() {
         val chessBoardStartY= round((screenHeight/(screenRatio*7)))
         val squareSide = screenWidth/8
 
-        chessBoard = ChessBoard(color, this)
+        chessBoard = ChessBoard(color, this, screenWidth, screenHeight)
         val greenSquareFactory = GreenSquareFactory(this, constraintLayout, chessBoard)
 
         val titleLayout = findViewById<LinearLayout>(R.id.titleLayout)
@@ -72,8 +75,10 @@ class Openings : AppCompatActivity() {
 
         val title = findViewById<TextView>(R.id.title)
         title.requestLayout()
+        title.text = openingName
+        title.textSize = 25F
         title.layoutParams.width = screenWidth/2
-        title.layoutParams.height = screenHeight/19
+        title.layoutParams.height = screenHeight/8
 
         val logo = findViewById<ImageView>(R.id.logo)
         logo.requestLayout()
@@ -134,9 +139,9 @@ class Openings : AppCompatActivity() {
 
 
         val FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
-
+        println(chessBoardStartY)
         drawPieces(FEN.toCharArray(), chessBoardStartY, 0F, squareSide.toFloat(), constraintLayout, squareSide, chessBoard, greenSquareFactory, color)
-        chessBoard.generateFen(color)
+        println(chessBoard.generateFen(color))
     }
 
     override fun onDestroy() {
@@ -150,12 +155,28 @@ class Openings : AppCompatActivity() {
         window.statusBarColor = this.resources.getColor(R.color.panel)
     }
 
-    private fun getScreenWidth(): Int {
+    fun getScreenWidth(): Int {
         return Resources.getSystem().displayMetrics.widthPixels
     }
 
-    private fun getScreenHeight(): Int {
-        return Resources.getSystem().displayMetrics.heightPixels
+    fun getScreenHeight(): Int {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // Modern API: WindowMetrics
+            val windowMetrics = windowManager.currentWindowMetrics
+            val insets = windowMetrics.windowInsets
+            val navBarInsets = insets.getInsets(WindowInsets.Type.navigationBars())
+            windowMetrics.bounds.height() - navBarInsets.bottom
+        } else {
+            // Legacy API: DisplayMetrics
+            val display = windowManager.defaultDisplay
+            val usableSize = Point()
+            val realSize = Point()
+
+            display.getSize(usableSize)
+            display.getRealSize(realSize)
+
+            usableSize.y // Return the usable screen height
+        }
     }
 
     private fun drawPieces(FEN: CharArray, startY:Float, startX:Float, squareSize: Float, constraintLayout:ConstraintLayout, pieceSize: Int, chessBoard:ChessBoard, greenSquareFactory: GreenSquareFactory, color: Int){
@@ -167,6 +188,7 @@ class Openings : AppCompatActivity() {
         if (color == 0) {
             var currentSquareX = startX
             var currentSquareY = startY
+            println(startY)
             for (i in FEN.indices) {
                     if(FEN[i] == ' '){
                         break
