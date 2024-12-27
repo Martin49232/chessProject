@@ -15,4 +15,5 @@
     <color name="background">#2F2E2A</color>
     <color name="panel">#262521</color>
     <color name="button">#86A94B</color>
+    <color name="buttonMargin">#444444</color>
 </resources>

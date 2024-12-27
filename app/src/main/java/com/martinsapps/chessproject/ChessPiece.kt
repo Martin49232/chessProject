@@ -5,6 +5,7 @@ import android.content.Context
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import kotlin.math.floor
 
 class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,color: Int,  chessBoard: ChessBoard,
                  private val squareFactory: GreenSquareFactory
@@ -67,11 +68,18 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
     @SuppressLint("ClickableViewAccessibility")
     private fun makePieceClickable() {
         fun movingPiece(){
+            chessBoard.plyCounter+=1
             squareFactory.removeSquares()
             chessBoard.removeGreenSquare(constraintLayout)
             chessBoard.turn = !chessBoard.turn
             chessBoard.fen = chessBoard.generateFen(color)
             chessBoard.previousMovesMovedBackList = mutableListOf()
+            /*if (chessBoard.dbHandler.getOpening(chessBoard.opening, (chessBoard.plyCounter)) != chessBoard.fen){
+                chessBoard.fen = ChessBoard.BASIC_CHESS_SETTINGS
+                chessBoard.plyCounter = 0
+                chessBoard.turn = true
+            }*/
+            //TODO dodelat kontrolu tahu
         }
 
         imageView.setOnClickListener {

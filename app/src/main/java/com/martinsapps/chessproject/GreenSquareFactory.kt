@@ -23,7 +23,7 @@ class GreenSquareFactory(context: Context, constraintLayout: ConstraintLayout, c
         hollowCircleImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.map_circle_green))
         hollowCircleImageView.y = this.chessBoard.squareCoordinates[squareNumber][1].toFloat()
         hollowCircleImageView.x = this.chessBoard.squareCoordinates[squareNumber][0].toFloat()
-        hollowCircleImageView.setAlpha(45)
+        hollowCircleImageView.setAlpha(60)
         constraintLayout.addView(hollowCircleImageView)
         hollowCircleImageView.layoutParams.height = chessBoard.squareSize
         hollowCircleImageView.layoutParams.width = chessBoard.squareSize
@@ -35,7 +35,7 @@ class GreenSquareFactory(context: Context, constraintLayout: ConstraintLayout, c
         dotImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.dot_green))
         dotImageView.y = this.chessBoard.squareCoordinates[squareNumber][1].toFloat()+chessBoard.squareSize/3
         dotImageView.x = this.chessBoard.squareCoordinates[squareNumber][0].toFloat()+chessBoard.squareSize/3
-        dotImageView.setAlpha(45)
+        dotImageView.setAlpha(60)
         constraintLayout.addView(dotImageView)
         dotImageView.layoutParams.height = chessBoard.squareSize/3
         dotImageView.layoutParams.width = chessBoard.squareSize/3
