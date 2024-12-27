@@ -15,8 +15,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.R.anim.abc_popup_enter
-import androidx.appcompat.R.anim.abc_popup_exit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.martinsapps.chessproject.databinding.ActivityMainBinding
@@ -38,10 +36,10 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         // Set the enter and exit transitions
-        overridePendingTransition(
-            abc_popup_enter,
-            abc_popup_exit
-        )
+        //overridePendingTransition(
+        //    androidx.appcompat.R.anim.abc_popup_enter,
+        //    abc_popup_exit
+        //)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.statusBarColor = this.resources.getColor(R.color.panel)
@@ -59,12 +57,14 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, OpeningsRoot::class.java)
             intent.putExtra("color", 0)
             this.startActivity(intent)
+            finish()
         }
         val blackOpenings = findViewById<ImageButton>(R.id.black)
         blackOpenings.setOnClickListener {
             val intent = Intent(this, OpeningsRoot::class.java)
             intent.putExtra("color", 1);
             this.startActivity(intent)
+            finish()
         }
 
         val titleLayout = findViewById<LinearLayout>(R.id.titleLayout)
@@ -157,5 +157,9 @@ class MainActivity : AppCompatActivity() {
         } catch (e: IOException) {
             println(e)
         }
+    }
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.popup_enter, R.anim.popup_exit)
     }
 }

@@ -12,7 +12,10 @@ class DbHandler
 
     override fun onUpgrade(sqLiteDatabase: SQLiteDatabase, i: Int, i1: Int) {}
 
-    fun getOpening(openingsName: String, move: Int): String{
+    fun getOpening(openingsName: String?, move: Int): String{
+        if (openingsName == null){
+            throw IllegalArgumentException("You tried to search for table with name null you fucking donkey")
+        }
         val db = this.readableDatabase
         var returnString = ""
         val query = "SELECT * FROM $openingsName WHERE move_number = $move"

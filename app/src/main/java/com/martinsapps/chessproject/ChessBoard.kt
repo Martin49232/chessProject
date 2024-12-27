@@ -10,7 +10,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import kotlin.math.round
 
-class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: Int) {
+class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: Int, opening: String?) {
 
     val squareCoordinates: Array<IntArray>
     val startY:Float
@@ -38,14 +38,18 @@ class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: I
 
     //en passant square
     var enPassantSquare = false
+    val dbHandler: DbHandler
 
     val soundPlayer = SoundPlayer(context)
 
 
     var moves: MutableList<Move> = mutableListOf()
+    val opening = opening
+    var plyCounter: Int
 
     init {
         this.color = color
+        this.dbHandler = DbHandler(context, "openings.db",null, 1 )
         val screenRatio = screenWidth.toFloat()/screenHeight.toFloat()
         this.screenWidth = screenWidth
         this.screenHeight=screenHeight
@@ -58,6 +62,7 @@ class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: I
         this.clickedPieceCoordinates = IntArray(2)
         this.greenSquareImageView = null
         this.pieces = mutableListOf()
+        this.plyCounter = 0
     }
     companion object{
         val mapOfNotationToImages = mapOf(
@@ -91,6 +96,8 @@ class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: I
             R.drawable.white_rook to 'r',
             R.drawable.white_pawn to 'p'
         )
+
+        const val BASIC_CHESS_SETTINGS = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
 
         init {
             System.loadLibrary("chessproject")
@@ -163,21 +170,12 @@ class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: I
 
     fun generateFen(color: Int): String{
         var fen = ""
-
-        for(i in squareCoordinates){
-            println(i[1])
-        }
-        for (i in pieces){
-            println(i.y)
-        }
         if (color == 0) {
             var emptySquareCounter = 0
             var added = 1
 
             for (i in squareCoordinates.indices) {
                 for (j in pieces.indices) {
-                    //println(squareCoordinates[i][1])
-                    //println(pieces[j].y.toInt())
                     if (squareCoordinates[i][0] == pieces[j].x.toInt() && squareCoordinates[i][1] == pieces[j].y.toInt()) {
                         if (emptySquareCounter != 0) {
                             val character = (emptySquareCounter + 48).toChar()

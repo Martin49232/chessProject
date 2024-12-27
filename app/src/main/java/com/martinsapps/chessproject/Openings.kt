@@ -28,7 +28,6 @@ class Openings : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.openings_layout)
-        overridePendingTransition(androidx.appcompat.R.anim.abc_popup_enter, androidx.appcompat.R.anim.abc_popup_exit)
 
         val constraintLayout = findViewById<ConstraintLayout>(R.id.cl)
         val screenWidth = getScreenWidth()
@@ -51,6 +50,7 @@ class Openings : AppCompatActivity() {
             val intent = Intent(this, OpeningsRoot::class.java)
             intent.putExtra("color", color)
             this.startActivity(intent)
+            finish()
         }
         //val intent = intent
         //white is 0
@@ -61,7 +61,7 @@ class Openings : AppCompatActivity() {
         val chessBoardStartY= round((screenHeight/(screenRatio*7)))
         val squareSide = screenWidth/8
 
-        chessBoard = ChessBoard(color, this, screenWidth, screenHeight)
+        chessBoard = ChessBoard(color, this, screenWidth, screenHeight, dbOpeningName)
         val greenSquareFactory = GreenSquareFactory(this, constraintLayout, chessBoard)
 
         val titleLayout = findViewById<LinearLayout>(R.id.titleLayout)
@@ -155,11 +155,11 @@ class Openings : AppCompatActivity() {
         window.statusBarColor = this.resources.getColor(R.color.panel)
     }
 
-    fun getScreenWidth(): Int {
+    private fun getScreenWidth(): Int {
         return Resources.getSystem().displayMetrics.widthPixels
     }
 
-    fun getScreenHeight(): Int {
+    private fun getScreenHeight(): Int {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             // Modern API: WindowMetrics
             val windowMetrics = windowManager.currentWindowMetrics
@@ -179,7 +179,7 @@ class Openings : AppCompatActivity() {
         }
     }
 
-    private fun drawPieces(FEN: CharArray, startY:Float, startX:Float, squareSize: Float, constraintLayout:ConstraintLayout, pieceSize: Int, chessBoard:ChessBoard, greenSquareFactory: GreenSquareFactory, color: Int){
+    fun drawPieces(FEN: CharArray, startY:Float, startX:Float, squareSize: Float, constraintLayout:ConstraintLayout, pieceSize: Int, chessBoard:ChessBoard, greenSquareFactory: GreenSquareFactory, color: Int){
         chessBoard.pieces = mutableListOf()
         fun createPiece(type: Int): ChessPiece{
             return ChessPiece(type, this, constraintLayout,color, chessBoard, greenSquareFactory)
@@ -321,6 +321,11 @@ class Openings : AppCompatActivity() {
                     currentSquareX -= squareSize
                 }
         }
+    }
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.popup_enter, R.anim.popup_exit)
     }
 
 

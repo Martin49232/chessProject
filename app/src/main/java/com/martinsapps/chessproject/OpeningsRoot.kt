@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Resources
+import android.graphics.Color
 import android.graphics.Point
 import android.graphics.Typeface
 import android.os.Build
@@ -20,8 +21,6 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.R.anim.abc_popup_enter
-import androidx.appcompat.R.anim.abc_popup_exit
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -44,10 +43,10 @@ class OpeningsRoot : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_openings_root)
         // Set the enter and exit transitions
-        overridePendingTransition(
-            abc_popup_enter,
-            abc_popup_exit
-        )
+        //overridePendingTransition(
+        //    abc_popup_enter,
+        //    abc_popup_exit
+        //)
         val dbHandler = DbHandler(applicationContext, "openings.db", null, 1)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -58,6 +57,7 @@ class OpeningsRoot : AppCompatActivity() {
         backButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             this.startActivity(intent)
+            finish()
         }
 
         val intent = intent
@@ -138,12 +138,12 @@ class OpeningsRoot : AppCompatActivity() {
 
         val imageButton = ImageButton(this).apply {
             layoutParams = LinearLayout.LayoutParams(400, 400)
-            setImageResource(getImage(dbName))
+            getImage(dbName)?.let { setImageResource(it) }
             scaleType = ImageView.ScaleType.FIT_CENTER
             if (color == 0){
                 setBackgroundResource(android.R.color.white)
             }else{
-                setBackgroundResource(android.R.color.black)
+                setBackgroundResource(R.color.buttonMargin)
             }
             setPadding(20,20,20,20)
             setOnClickListener {
@@ -156,6 +156,7 @@ class OpeningsRoot : AppCompatActivity() {
             intent.putExtra("color", color)
             intent.putExtra("name", getName(dbName))
             this.startActivity(intent)
+            finish()
         }
 
         val textView = TextView(this).apply {
@@ -183,24 +184,48 @@ class OpeningsRoot : AppCompatActivity() {
 
 
 
-    private fun getName(dbName: String): String {
+    private fun getName(dbName: String): String? {
         val names = mapOf(
             "fried_liver" to "Fried Liver",
             "najdorf" to "Najdorf",
             "giuoco_piano" to "Giuoco Piano",
-            "giuoco_piano_center_attack" to "Giuoco Piano Center Attack"
+            "giuoco_piano_center_attack" to "Giuoco Piano Center Attack",
+            "giuoco_piano_greco_attack" to "Giuoco Piano Greco Attack",
+            "giuoco_pianissimo" to "Giuocp Pianissimo",
+            "giuoco_piano_second_line" to "Giuoco Piano Second Line",
+            "evans_gambit" to "Evans Gambit",
+            "evans_accepted_anderssen" to "Evans Gambit Anderssen",
+            "evans_declined" to "Evans Declined",
+            "classical_nimzo_indian_defence" to "Classical Nimzo Indian Defence"
         )
-        return names[dbName]!!
+        return if (names[dbName] != null) {
+            names[dbName]
+        }
+        else{
+            "Name not found"
+        }
     }
 
-    private fun getImage(dbName: String): Int {
+    private fun getImage(dbName: String): Int? {
         val images = mapOf(
             "fried_liver" to R.drawable.fried_liver,
             "najdorf" to R.drawable.sicilian_najdorf,
             "giuoco_piano" to R.drawable.giuoco_piano,
-            "giuoco_piano_center_attack" to R.drawable.giuoco_piano_center_attack
+            "giuoco_piano_center_attack" to R.drawable.giuoco_piano_center_attack,
+            "giuoco_piano_greco_attack" to R.drawable.giuoco_piano_greco_attack,
+            "giuoco_pianissimo" to R.drawable.giuoco_pianissimo,
+            "giuoco_piano_second_line" to R.drawable.giuoco_piano_second_line,
+            "evans_gambit" to R.drawable.evans_gambit,
+            "evans_accepted_anderssen" to R.drawable.evans_accepted_anderssen,
+            "evans_declined" to R.drawable.evans_declined,
+            "classical_nimzo_indian_defence" to R.drawable.classical_nimzo_indian_defence
         )
-        return images[dbName]!!
+        return if (images[dbName] != null) {
+            images[dbName]
+        }
+        else{
+            return R.drawable.image_not_found
+        }
     }
 
     private fun getScreenWidth(): Int {
@@ -226,6 +251,10 @@ class OpeningsRoot : AppCompatActivity() {
             usableSize.y // Return the usable screen height
         }
         //return Resources.getSystem().displayMetrics.heightPixels
+    }
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.popup_enter, R.anim.popup_exit)
     }
 
 
