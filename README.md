@@ -16,7 +16,7 @@ bash\
 Copy\
 Edit\
 ```bash
-git clone https://github.com/yourusername/projectname.git
+git clone https://github.com/Martin49232/chessProject.git
 ```
 Open Android Studio and select "Open an Existing Project"\
 Select the cloned folder\
