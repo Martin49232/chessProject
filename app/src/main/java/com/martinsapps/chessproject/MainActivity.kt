@@ -7,6 +7,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.transition.Explode
+import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Button
@@ -14,6 +15,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -69,19 +71,12 @@ class MainActivity : AppCompatActivity() {
 
         val titleLayout = findViewById<LinearLayout>(R.id.titleLayout)
         val bottomLayout = findViewById<LinearLayout>(R.id.bottomLinearLayout)
-        val settings = findViewById<Button>(R.id.settings)
-        val lastPlayed = findViewById<Button>(R.id.lastPlayed)
+        val settings = findViewById<ImageButton>(R.id.settings)
+        val lastPlayed = findViewById<ImageButton>(R.id.lastPlayed)
 
         titleLayout.requestLayout()
         titleLayout.layoutParams.width = screenWidth
         titleLayout.layoutParams.height = screenHeight/8
-
-
-        val title = findViewById<TextView>(R.id.title)
-        title.requestLayout()
-        title.textSize = 32F
-        title.layoutParams.width = screenWidth/2
-        title.layoutParams.height = screenHeight/8
 
         bottomLayout.requestLayout()
         bottomLayout.layoutParams.width = screenWidth
@@ -103,9 +98,37 @@ class MainActivity : AppCompatActivity() {
         blackOpenings.layoutParams.height = screenWidth / 2
         blackOpenings.layoutParams.width = screenWidth / 2
 
+        val streak = findViewById<ImageButton>(R.id.fire)
+        streak.requestLayout()
+        streak.layoutParams.width = screenWidth/4
+        streak.layoutParams.height = screenWidth/4
+
+        val title = findViewById<TextView>(R.id.title)
+        title.requestLayout()
+        title.textSize = 32F
+        title.layoutParams.width = screenWidth/2
+        title.layoutParams.height = screenHeight/8
+
+        val logo = findViewById<ImageView>(R.id.logo)
+        logo.requestLayout()
+        logo.layoutParams.width = screenWidth/4
+        logo.layoutParams.height = screenWidth/4
+
+        val dbHandler = DbHandler(applicationContext, "openings.db", null, 1)
 
         settings.setOnClickListener{
+            //Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, Settings::class.java)
+            this.startActivity(intent)
+            finish()
+        }
 
+        lastPlayed.setOnClickListener{
+            Toast.makeText(this, "Last Trained Openings", Toast.LENGTH_SHORT).show()
+        }
+
+        streak.setOnClickListener{
+            Toast.makeText(this, "Your current streak is xyz days", Toast.LENGTH_SHORT).show()
         }
     }
 

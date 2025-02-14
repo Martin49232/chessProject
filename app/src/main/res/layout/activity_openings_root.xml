@@ -58,17 +58,18 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="603dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        android:fillViewport="true"
         app:layout_constraintTop_toBottomOf="@+id/titleLayout">
 
         <LinearLayout
             android:id="@+id/scrollViewLinearLayout"
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="vertical" />
     </ScrollView>
 
