@@ -6,11 +6,12 @@ import android.graphics.Point
 import android.os.Build
 import android.view.WindowInsets
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import kotlin.math.round
 
-class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: Int, opening: String?) {
+class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: Int, opening: String?, val notationTextView: TextView) {
 
     val squareCoordinates: Array<IntArray>
     val startY:Float
@@ -97,7 +98,7 @@ class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: I
             R.drawable.white_pawn to 'p'
         )
 
-        const val BASIC_CHESS_SETTINGS = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
+        const val BASIC_CHESS_SETTINGS = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - "
 
         init {
             System.loadLibrary("chessproject")
@@ -168,6 +169,186 @@ class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: I
         constraintLayout.removeView(this.greenSquareImageView)
     }
 
+    fun getPlayedMove(fen1: String, fen2: String): IntArray {
+
+
+        fun parseFenPosition(fen: String): String {
+            val rows = fen.split(" ")[0].split("/")
+            val board = StringBuilder()
+
+            for (row in rows) {
+                for (char in row) {
+                    if (char.isDigit()) {
+                        repeat(char.digitToInt()) { board.append("1") }
+                    } else {
+                        board.append(char)
+                    }
+                }
+            }
+            return board.toString()
+        }
+
+        val board1 = parseFenPosition(fen1)
+        val board2 = parseFenPosition(fen2)
+        println(board1)
+        println(board2)
+
+        var fromSquare: Int? = null
+        var toSquare: Int? = null
+
+
+        if (board1[60] == 'K' && board2[60] == '1' && board2[62] == 'K') {
+            // White kingside castling (e1 to g1)
+            return if (color == 0) intArrayOf(60, 63) else intArrayOf(4, 7)
+        } else if (board1[4] == 'k' && board2[4] == '1' && board2[6] == 'k') {
+            // Black kingside castling (e8 to g8)
+            return if (color == 0) intArrayOf(4, 7) else intArrayOf(60, 63)
+        } else if (board1[60] == 'K' && board2[60] == '1' && board2[58] == 'K') {
+            // White queenside castling (e1 to c1)
+            return if (color == 0) intArrayOf(60, 56) else intArrayOf(4, 1)
+        } else if (board1[4] == 'k' && board2[4] == '1' && board2[2] == 'k') {
+            // Black queenside castling (e8 to c8)
+            return if (color == 0) intArrayOf(4, 1) else intArrayOf(60, 56)
+        }
+
+
+
+        for (i in 0 until 64) {
+            if (board1[i] != board2[i]) {
+                when {
+                    board1[i] != '1' && board2[i] == '1' -> {
+
+                        fromSquare = i
+                    }
+                    board1[i] == '1' && board2[i] != '1' -> {
+                        toSquare = i
+                    }
+                    board1[i] != '1' && board2[i] != '1' && board1[i].isLowerCase() != board2[i].isLowerCase() -> {
+
+                        fromSquare = fromSquare ?: i
+                        toSquare = toSquare ?: i
+                    }
+                }
+            }
+        }
+
+        if (fromSquare == null || toSquare == null) {
+            throw IllegalArgumentException("No valid move detected. Moves were: fromSquare=$fromSquare, toSquare=$toSquare")
+        }
+
+        return if (color == 0) {
+
+            intArrayOf(toSquare, fromSquare)
+        } else {
+
+            intArrayOf(63 - toSquare, 63 - fromSquare)
+        }
+    }
+
+
+    fun getPlayedMoveAlgebraicWithPiece(fen1: String, fen2: String): String {
+        fun parseFenPosition(fen: String): String {
+            val rows = fen.split(" ")[0].split("/") // Get the board part and split by rows
+            val board = StringBuilder()
+
+            for (row in rows) {
+                for (char in row) {
+                    if (char.isDigit()) {
+                        // Append the corresponding number of empty squares
+                        repeat(char.digitToInt()) { board.append("1") }
+                    } else {
+                        // Append the piece
+                        board.append(char)
+                    }
+                }
+            }
+            return board.toString()
+        }
+
+        fun indexToAlgebraic(index: Int): String {
+            val file = 'a' + (index % 8) // 'a' for column 0, 'b' for column 1, etc.
+            val rank = 8 - (index / 8) // 8 for row 0, 7 for row 1, etc.
+            return "$file$rank"
+        }
+
+        // Parse the board positions from the FEN strings
+        val board1 = parseFenPosition(fen1)
+        val board2 = parseFenPosition(fen2)
+
+
+        if (board1[60] == 'K' && board2[60] == '1' && board2[62] == 'K') {
+            // White kingside castling (e1 to g1)
+            return "0-0"
+        } else if (board1[4] == 'k' && board2[4] == '1' && board2[6] == 'k') {
+            // Black kingside castling (e8 to g8)
+            return "0-0"
+        } else if (board1[60] == 'K' && board2[60] == '1' && board2[58] == 'K') {
+            // White queenside castling (e1 to c1)
+            return "0-0-0"
+        } else if (board1[4] == 'k' && board2[4] == '1' && board2[2] == 'k') {
+            // Black queenside castling (e8 to c8)
+            return "0-0-0"
+        }
+
+
+
+        // Initialize variables to find moved squares
+        var fromSquare: Int? = null
+        var toSquare: Int? = null
+        var isCapture =false
+        for (i in 0 until 64) {
+            if (board1[i] != board2[i]) {
+                when {
+                    board1[i] != '1' && board2[i] == '1' -> {
+                        fromSquare = i
+                    }
+                    board1[i] == '1' && board2[i] != '1' -> {
+                        toSquare = i
+                    }
+                    board1[i] != '1' && board2[i] != '1' && board1[i].isLowerCase() != board2[i].isLowerCase() -> {
+                        // Capture occurred
+                        fromSquare = fromSquare ?: i
+                        toSquare = toSquare ?: i
+                        isCapture= true
+                    }
+                }
+            }
+        }
+
+        if (fromSquare == null || toSquare == null) {
+            throw IllegalArgumentException("No valid move detected. Moves were: fromSquare=$fromSquare, toSquare=$toSquare")
+        }
+
+        val fromAlgebraic = indexToAlgebraic(fromSquare)
+        val toAlgebraic = indexToAlgebraic(toSquare)
+
+        val movingPiece = board1[fromSquare]
+        val pieceType = when (movingPiece.lowercaseChar()) {
+            'p' -> ""
+            'r' -> "R"
+            'n' -> "N"
+            'b' -> "B"
+            'q' -> "Q"
+            'k' -> "K"
+            else -> throw IllegalArgumentException("Unknown piece type: $movingPiece")
+        }
+
+
+        return if (pieceType.isEmpty()) {
+            if (isCapture) {
+                "${fromAlgebraic[0]}x$toAlgebraic"
+            } else {
+                toAlgebraic
+            }
+        } else {
+            if (isCapture) {
+                "${pieceType}x$toAlgebraic"
+            } else {
+                "$pieceType$toAlgebraic"
+            }
+        }
+    }
+
     fun generateFen(color: Int): String{
         var fen = ""
         if (color == 0) {
@@ -233,7 +414,9 @@ class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: I
                     fen += character
                     emptySquareCounter = 0
                 }
-                fen += '/'
+                if(i !=0){
+                    fen += '/'
+                }
 
             }
 
@@ -284,6 +467,159 @@ class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: I
         return fen
     }
 
+    fun removePieces(constraintLayout: ConstraintLayout){
+        for(piece in pieces){
+            constraintLayout.removeView(piece)
+            piece.setOnClickListener(null)
+        }
+        pieces = mutableListOf()
+    }
+
+
+    fun drawPieces(FEN: CharArray, startY:Float, startX:Float, squareSize: Float, constraintLayout:ConstraintLayout, pieceSize: Int, chessBoard:ChessBoard, greenSquareFactory: GreenSquareFactory, color: Int, context: Context, width: Int){
+        chessBoard.pieces = mutableListOf()
+        fun createPiece(type: Int): ChessPiece{
+            return ChessPiece(type, context, constraintLayout,color, chessBoard, greenSquareFactory)
+        }
+
+        if (color == 0) {
+            var currentSquareX = startX
+            var currentSquareY = startY
+            for (i in FEN.indices) {
+                if(FEN[i] == ' '){
+                    break
+                }
+                else if (FEN[i] == 'r') {
+                    val piece = createPiece(ChessPiece.BLACK_ROOK).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'n') {
+                    val piece = createPiece(ChessPiece.BLACK_KNIGHT).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'b') {
+                    val piece = createPiece(ChessPiece.BLACK_BISHOP).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'q') {
+                    val piece = createPiece(ChessPiece.BLACK_QUEEN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'k') {
+                    val piece = createPiece(ChessPiece.BLACK_KING).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'p') {
+                    val piece = createPiece(ChessPiece.BLACK_PAWN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'R') {
+                    val piece = createPiece(ChessPiece.WHITE_ROOK).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'N') {
+                    val piece = createPiece(ChessPiece.WHITE_KNIGHT).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'B') {
+                    val piece = createPiece(ChessPiece.WHITE_BISHOP).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'Q') {
+                    val piece = createPiece(ChessPiece.WHITE_QUEEN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'K') {
+                    val piece = createPiece(ChessPiece.WHITE_KING).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'P') {
+                    val piece = createPiece(ChessPiece.WHITE_PAWN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == '/') {
+                    currentSquareY += squareSize
+                    currentSquareX = startX
+                    continue
+                }
+                else if  (FEN[i].isDigit()) {
+                    for (j in FEN[i].digitToInt() downTo 2) {
+                        currentSquareX += squareSize
+                    }
+                }
+                currentSquareX += squareSize
+            }
+        }else{
+            var currentSquareX = startX+width-width/8
+            var currentSquareY = startY+width-width/8
+            for (i in FEN.indices) {
+                if(FEN[i] == ' '){
+                    break
+                }
+                else if  (FEN[i] == 'r') {
+                    val piece = createPiece(ChessPiece.BLACK_ROOK).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'n') {
+                    val piece = createPiece(ChessPiece.BLACK_KNIGHT).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'b') {
+                    val piece = createPiece(ChessPiece.BLACK_BISHOP).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'q') {
+                    val piece = createPiece(ChessPiece.BLACK_QUEEN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'k') {
+                    val piece = createPiece(ChessPiece.BLACK_KING).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'p') {
+                    val piece = createPiece(ChessPiece.BLACK_PAWN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'R') {
+                    val piece = createPiece(ChessPiece.WHITE_ROOK).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'N') {
+                    val piece = createPiece(ChessPiece.WHITE_KNIGHT).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'B') {
+                    val piece = createPiece(ChessPiece.WHITE_BISHOP).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'Q') {
+                    val piece = createPiece(ChessPiece.WHITE_QUEEN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'K') {
+                    val piece = createPiece(ChessPiece.WHITE_KING).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == 'P') {
+                    val piece = createPiece(ChessPiece.WHITE_PAWN).drawPiece(currentSquareX, currentSquareY, pieceSize, pieceSize)
+                    chessBoard.pieces.add(piece)
+                }
+                else if  (FEN[i] == '/') {
+                    currentSquareY -= squareSize
+                    currentSquareX = startX+width-width/8
+                    continue
+                }
+                else if  (FEN[i].isDigit()) {
+                    for (j in FEN[i].digitToInt() downTo 2) {
+                        currentSquareX -= squareSize
+                    }
+                }
+                currentSquareX -= squareSize
+            }
+        }
+    }
+
+
     fun pseudoLegalMoves(fen: String): MutableList<Move>{
         val returnMoves = mutableListOf<Move>()
         val moves = getPseudoMoves(fen)
@@ -303,7 +639,6 @@ class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: I
                 returnMoves[i].from = 63-returnMoves[i].from
             }
         }
-        println(fen)
         return returnMoves
     }
 

@@ -38,7 +38,7 @@ class Openings : AppCompatActivity() {
 
         val moveBackButton = findViewById<Button>(R.id.moveBack)
         val moveForwardButton = findViewById<Button>(R.id.moveForward)
-
+        val notationTextView = findViewById<TextView>(R.id.notation)
         val hintButton = findViewById<ImageButton>(R.id.hint)
 
         val color = intent.getIntExtra("color", 0)
@@ -57,11 +57,13 @@ class Openings : AppCompatActivity() {
         //black is 1
 
 
+
         val screenRatio = screenWidth.toFloat()/screenHeight.toFloat()
         val chessBoardStartY= round((screenHeight/(screenRatio*7)))
         val squareSide = screenWidth/8
 
-        chessBoard = ChessBoard(color, this, screenWidth, screenHeight, dbOpeningName)
+
+        chessBoard = ChessBoard(color, this, screenWidth, screenHeight, dbOpeningName, notationTextView)
         val greenSquareFactory = GreenSquareFactory(this, constraintLayout, chessBoard)
 
         val titleLayout = findViewById<LinearLayout>(R.id.titleLayout)
@@ -85,6 +87,19 @@ class Openings : AppCompatActivity() {
         logo.layoutParams.width = screenWidth/4
         logo.layoutParams.height = screenWidth/4
 
+        hintButton.setOnClickListener{
+            greenSquareFactory.removeSquares()
+            println(chessBoard.fen)
+            println(chessBoard.dbHandler.getOpening(chessBoard.opening, (chessBoard.plyCounter+1)))
+            if (chessBoard.dbHandler.getOpening(chessBoard.opening, (chessBoard.plyCounter+1)).isNotBlank()){
+                val squares = chessBoard.getPlayedMove(chessBoard.fen, chessBoard.dbHandler.getOpening(chessBoard.opening, (chessBoard.plyCounter+1)))
+                greenSquareFactory.addGreenSquare(squares[0])
+                greenSquareFactory.addGreenSquare(squares[1])
+                for (imageView in chessBoard.pieces){
+                    imageView.bringToFront()
+                }
+            }
+        }
 
         moveBackButton.setOnClickListener {
             if(chessBoard.previousMovesList.size-1>0) {
@@ -99,6 +114,9 @@ class Openings : AppCompatActivity() {
                 chessBoard.removeGreenSquare(constraintLayout)
                 val splitFen = chessBoard.fen.split(" ")
                 chessBoard.turn = splitFen[1] == "w"
+                if (chessBoard.plyCounter >0){
+                    chessBoard.plyCounter-=1
+                }
                 drawPieces(chessBoard.fen.toCharArray(), chessBoardStartY, 0F, squareSide.toFloat(), constraintLayout, squareSide, chessBoard, greenSquareFactory, color)
             }
         }
@@ -116,6 +134,7 @@ class Openings : AppCompatActivity() {
                 chessBoard.removeGreenSquare(constraintLayout)
                 val splitFen = chessBoard.fen.split(" ")
                 chessBoard.turn = splitFen[1] == "w"
+                chessBoard.plyCounter+=1
                 drawPieces(chessBoard.fen.toCharArray(), chessBoardStartY, 0F, squareSide.toFloat(), constraintLayout, squareSide, chessBoard, greenSquareFactory, color)
             }
         }
@@ -139,7 +158,6 @@ class Openings : AppCompatActivity() {
 
 
         val FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
-        println(chessBoardStartY)
         drawPieces(FEN.toCharArray(), chessBoardStartY, 0F, squareSide.toFloat(), constraintLayout, squareSide, chessBoard, greenSquareFactory, color)
         println(chessBoard.generateFen(color))
     }
@@ -179,7 +197,7 @@ class Openings : AppCompatActivity() {
         }
     }
 
-    fun drawPieces(FEN: CharArray, startY:Float, startX:Float, squareSize: Float, constraintLayout:ConstraintLayout, pieceSize: Int, chessBoard:ChessBoard, greenSquareFactory: GreenSquareFactory, color: Int){
+    private fun drawPieces(FEN: CharArray, startY:Float, startX:Float, squareSize: Float, constraintLayout:ConstraintLayout, pieceSize: Int, chessBoard:ChessBoard, greenSquareFactory: GreenSquareFactory, color: Int){
         chessBoard.pieces = mutableListOf()
         fun createPiece(type: Int): ChessPiece{
             return ChessPiece(type, this, constraintLayout,color, chessBoard, greenSquareFactory)

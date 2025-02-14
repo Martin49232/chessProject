@@ -28,6 +28,46 @@ class DbHandler
         return returnString
     }
 
+    fun getSettings(): Map<String, Any>? {
+        val db = this.readableDatabase
+        val settingsMap = mutableMapOf<String, Any>()
+
+        val query = "SELECT * FROM settings LIMIT 1"
+        val cursor = db.rawQuery(query, null)
+
+        // Check if there is at least one row in the cursor
+        if (cursor.moveToFirst()) {
+            // Retrieve the column indices
+            val chessboardIndex = cursor.getColumnIndex("chessboard")
+            val legalMovesIndex = cursor.getColumnIndex("legal_moves")
+            val soundEffectsIndex = cursor.getColumnIndex("sound_effects")
+
+            // Check if all column indices are valid (>= 0)
+            if (chessboardIndex >= 0) {
+                val chessboard = cursor.getString(chessboardIndex)
+                settingsMap["chessboard"] = chessboard
+            }
+
+            if (legalMovesIndex >= 0) {
+                val legalMoves = cursor.getInt(legalMovesIndex)
+                settingsMap["legal_moves"] = legalMoves
+            }
+
+            if (soundEffectsIndex >= 0) {
+                val soundEffects = cursor.getInt(soundEffectsIndex)
+                settingsMap["sound_effects"] = soundEffects
+            }
+        }
+
+        // Close the cursor and the database
+        cursor.close()
+        db.close()
+
+        // Return the map of settings if it contains data, otherwise null
+        return settingsMap.ifEmpty { null }
+    }
+
+
     fun createTable(name: String){
         val db = this.writableDatabase
         val query = "CREATE TABLE $name (move_number INTEGER PRIMARY KEY, fen TEXT NOT NULL)"
