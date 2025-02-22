@@ -67,6 +67,8 @@ class Openings : AppCompatActivity() {
         val greenSquareFactory = GreenSquareFactory(this, constraintLayout, chessBoard)
 
         val titleLayout = findViewById<LinearLayout>(R.id.titleLayout)
+
+        /*
         titleLayout.requestLayout()
         titleLayout.layoutParams.width = screenWidth
         titleLayout.layoutParams.height = screenHeight/8
@@ -86,6 +88,12 @@ class Openings : AppCompatActivity() {
         logo.requestLayout()
         logo.layoutParams.width = screenWidth/4
         logo.layoutParams.height = screenWidth/4
+
+
+         */
+
+        val title = findViewById<TextView>(R.id.title)
+        title.text = openingName
 
         hintButton.setOnClickListener{
             greenSquareFactory.removeSquares()

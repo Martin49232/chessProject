@@ -76,7 +76,7 @@ class OpeningsRoot : AppCompatActivity() {
 
         //val buttonList = mutableListOf<ImageButton>()
 
-        val titleLayout = findViewById<LinearLayout>(R.id.titleLayout)
+       /* val titleLayout = findViewById<LinearLayout>(R.id.titleLayout)
         titleLayout.requestLayout()
         titleLayout.layoutParams.width = screenWidth
         titleLayout.layoutParams.height = screenHeight/8
@@ -95,6 +95,8 @@ class OpeningsRoot : AppCompatActivity() {
         logo.requestLayout()
         logo.layoutParams.width = screenWidth/4
         logo.layoutParams.height = screenWidth/4
+        */
+
 
 
         // Loop through items, adding rows of two

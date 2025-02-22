@@ -17,6 +17,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.martinsapps.chessproject.databinding.ActivityMainBinding
@@ -73,8 +74,9 @@ class MainActivity : AppCompatActivity() {
         val bottomLayout = findViewById<LinearLayout>(R.id.bottomLinearLayout)
         val settings = findViewById<ImageButton>(R.id.settings)
         val lastPlayed = findViewById<ImageButton>(R.id.lastPlayed)
+        val streak = findViewById<ImageButton>(R.id.fire)
 
-        titleLayout.requestLayout()
+        /*titleLayout.requestLayout()
         titleLayout.layoutParams.width = screenWidth
         titleLayout.layoutParams.height = screenHeight/8
 
@@ -98,7 +100,7 @@ class MainActivity : AppCompatActivity() {
         blackOpenings.layoutParams.height = screenWidth / 2
         blackOpenings.layoutParams.width = screenWidth / 2
 
-        val streak = findViewById<ImageButton>(R.id.fire)
+
         streak.requestLayout()
         streak.layoutParams.width = screenWidth/4
         streak.layoutParams.height = screenWidth/4
@@ -113,6 +115,7 @@ class MainActivity : AppCompatActivity() {
         logo.requestLayout()
         logo.layoutParams.width = screenWidth/4
         logo.layoutParams.height = screenWidth/4
+        */
 
         val dbHandler = DbHandler(applicationContext, "openings.db", null, 1)
 
