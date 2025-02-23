@@ -127,7 +127,24 @@ class MainActivity : AppCompatActivity() {
         }
 
         lastPlayed.setOnClickListener{
-            Toast.makeText(this, "Last Trained Openings", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "Last Trained Openings", Toast.LENGTH_SHORT).show()
+            val opening = dbHandler.getLastPlayed()
+            if (opening == null){
+                Toast.makeText(this, "You need to play an opening first", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val dbName = opening["table_name"].toString()
+            val color = opening["color"].toString().toInt()
+            val name = opening["name"].toString()
+
+            val intent = Intent(this, Openings::class.java)
+            intent.putExtra("opening", dbName)
+            intent.putExtra("color", color)
+            intent.putExtra("name", name)
+
+            this.startActivity(intent)
+            finish()
+
         }
 
         streak.setOnClickListener{

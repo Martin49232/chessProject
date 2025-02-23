@@ -157,6 +157,7 @@ class OpeningsRoot : AppCompatActivity() {
             intent.putExtra("opening", dbName)
             intent.putExtra("color", color)
             intent.putExtra("name", getName(dbName))
+
             this.startActivity(intent)
             finish()
         }
@@ -193,7 +194,7 @@ class OpeningsRoot : AppCompatActivity() {
             "giuoco_piano" to "Giuoco Piano",
             "giuoco_piano_center_attack" to "Giuoco Piano Center Attack",
             "giuoco_piano_greco_attack" to "Giuoco Piano Greco Attack",
-            "giuoco_pianissimo" to "Giuocp Pianissimo",
+            "giuoco_pianissimo" to "Giuoco Pianissimo",
             "giuoco_piano_second_line" to "Giuoco Piano Second Line",
             "evans_gambit" to "Evans Gambit",
             "evans_accepted_anderssen" to "Evans Gambit Anderssen",

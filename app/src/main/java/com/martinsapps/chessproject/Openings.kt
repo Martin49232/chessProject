@@ -55,7 +55,11 @@ class Openings : AppCompatActivity() {
         //val intent = intent
         //white is 0
         //black is 1
+        val dbHandler = DbHandler(applicationContext, "openings.db", null, 1)
 
+        if (dbOpeningName != null && openingName != null) {
+            dbHandler.updateLastPlayed(dbOpeningName, color, openingName)
+        }
 
 
         val screenRatio = screenWidth.toFloat()/screenHeight.toFloat()

@@ -2,6 +2,7 @@ package com.martinsapps.chessproject
 
 import android.content.Context
 import android.media.SoundPool
+import java.io.IOException
 
 class SoundPlayer(context: Context) {
 
@@ -13,6 +14,7 @@ class SoundPlayer(context: Context) {
     private var captureSound: Int = 0
     private var wrongSound: Int = 0
     private var goodSound: Int = 0
+    private val dbHandler: DbHandler = DbHandler(context, "openings.db", null, 1)
 
     init {
         preloadSounds(context)
@@ -32,22 +34,36 @@ class SoundPlayer(context: Context) {
 
 
     fun playMoveSound() {
-        soundPool.play(moveSound, 1.0f, 1.0f, 0, 0, 1.0f)
+        val settings = dbHandler.getSettings() ?: throw IOException()
+        val soundEffects = settings["sound_effects"].toString().toInt()
+        if (soundEffects == 1) {
+            soundPool.play(moveSound, 1.0f, 1.0f, 0, 0, 1.0f)
+        }
     }
 
 
     fun playCaptureSound() {
+        val settings = dbHandler.getSettings() ?: throw IOException()
+        val soundEffects = settings["sound_effects"].toString().toInt()
+        if (soundEffects == 1) {
         soundPool.play(captureSound, 1.0f, 1.0f, 0, 0, 1.0f)
+        }
     }
 
-    fun playWrongSound(){
-        soundPool.play(wrongSound, 1.0f, 1.0f, 0, 0, 1.0f)
+    fun playWrongSound() {
+        val settings = dbHandler.getSettings() ?: throw IOException()
+        val soundEffects = settings["sound_effects"].toString().toInt()
+        if (soundEffects == 1) {
+            soundPool.play(wrongSound, 1.0f, 1.0f, 0, 0, 1.0f)
+        }
     }
-
-    fun playGoodSound(){
-        soundPool.play(goodSound, 1.0f, 1.0f, 0, 0, 1.0f)
+    fun playGoodSound() {
+        val settings = dbHandler.getSettings() ?: throw IOException()
+        val soundEffects = settings["sound_effects"].toString().toInt()
+        if (soundEffects == 1) {
+            soundPool.play(goodSound, 1.0f, 1.0f, 0, 0, 1.0f)
+        }
     }
-
     fun release() {
         soundPool.release()
     }
