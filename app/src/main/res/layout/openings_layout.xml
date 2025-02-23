@@ -54,6 +54,9 @@
     </LinearLayout>
 
     <!-- Notation Scroll View -->
+
+    <!-- Control Buttons -->
+
     <HorizontalScrollView
         android:id="@+id/scrollView"
         android:layout_width="0dp"
@@ -62,12 +65,15 @@
         android:scrollbars="none"
         app:layout_constraintBottom_toTopOf="@+id/controlLayout"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleLayout">
+        app:layout_constraintTop_toBottomOf="@+id/titleLayout"
+        app:layout_constraintVertical_bias="0.038">
 
         <TextView
             android:id="@+id/notation"
             android:layout_width="wrap_content"
+            android:gravity="center"
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:text=""
@@ -75,7 +81,6 @@
             android:textSize="14sp" />
     </HorizontalScrollView>
 
-    <!-- Control Buttons -->
     <LinearLayout
         android:id="@+id/controlLayout"
         android:layout_width="0dp"
