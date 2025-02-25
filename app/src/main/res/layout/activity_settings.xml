@@ -4,40 +4,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:id="@+id/main"
     android:background="@color/background"
     tools:context=".Settings">
 
-    <!-- Title Bar (with Back Button, Title, and Logo) -->
-
-    <!-- Toggle for Legal Moves -->
 
     <LinearLayout
         android:id="@+id/titleLayout"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         android:background="@color/panel"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:paddingVertical="16dp"
+        app:layout_constraintHeight_percent="0.125"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.025"
+        tools:layout_editor_absoluteX="0dp">
 
         <ImageButton
             android:id="@+id/back"
             style="?android:attr/borderlessButtonStyle"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:padding="8dp"
             app:srcCompat="@drawable/back_arrow" />
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:fontFamily="sans-serif"
             android:gravity="center"
             android:text="Openingo"
@@ -47,9 +45,10 @@
 
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             app:srcCompat="@drawable/svglogo" />
     </LinearLayout>
 
@@ -57,80 +56,44 @@
         android:id="@+id/text_legal_moves"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="84dp"
         android:text="Show Legal Moves"
-        android:textSize="18sp"
         android:textColor="?attr/colorOnBackground"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/titleLayout"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@id/switch_legal_moves"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/switch_legal_moves"/>
+        app:layout_constraintTop_toBottomOf="@id/titleLayout" />
+
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/switch_legal_moves"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/titleLayout"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:layout_marginTop="44dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_sound_effects" />
 
-    <!-- Dropdown for Board Theme -->
-    <TextView
-        android:id="@+id/text_board_theme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Board Theme"
-        android:textSize="18sp"
-        android:textColor="?attr/colorOnBackground"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/switch_legal_moves"
-        app:layout_constraintStart_toStartOf="parent"/>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/theme_dropdown_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:endIconMode="dropdown_menu"
-        app:layout_constraintTop_toBottomOf="@id/text_board_theme"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-            android:id="@+id/spinner_board_theme"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Select Theme"
-            android:textSize="16sp"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/theme_dropdown_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <!-- Toggle for Sound Effects -->
     <TextView
         android:id="@+id/text_sound_effects"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Sound Effects"
-        android:textSize="18sp"
-        android:textColor="?attr/colorOnBackground"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/theme_dropdown_layout"
+        android:text="Sound Effects"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@id/switch_sound_effects"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/switch_sound_effects"/>
+        app:layout_constraintTop_toBottomOf="@id/titleLayout" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/switch_sound_effects"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/theme_dropdown_layout"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleLayout" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 

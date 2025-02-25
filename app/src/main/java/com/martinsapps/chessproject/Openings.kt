@@ -19,6 +19,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import java.io.IOException
 import kotlin.math.round
 
 
@@ -55,7 +56,7 @@ class Openings : AppCompatActivity() {
         //val intent = intent
         //white is 0
         //black is 1
-
+        val dbHandler = DbHandler(applicationContext, "openings.db", null, 1)
 
 
         val screenRatio = screenWidth.toFloat()/screenHeight.toFloat()
@@ -66,7 +67,18 @@ class Openings : AppCompatActivity() {
         chessBoard = ChessBoard(color, this, screenWidth, screenHeight, dbOpeningName, notationTextView)
         val greenSquareFactory = GreenSquareFactory(this, constraintLayout, chessBoard)
 
+
+
+
         val titleLayout = findViewById<LinearLayout>(R.id.titleLayout)
+
+        if (dbOpeningName != null && openingName != null) {
+            dbHandler.updateLastPlayed(dbOpeningName, color, openingName)
+        }else{
+            throw IOException("database error")
+        }
+
+        /*
         titleLayout.requestLayout()
         titleLayout.layoutParams.width = screenWidth
         titleLayout.layoutParams.height = screenHeight/8
@@ -87,10 +99,14 @@ class Openings : AppCompatActivity() {
         logo.layoutParams.width = screenWidth/4
         logo.layoutParams.height = screenWidth/4
 
+
+         */
+
+        val title = findViewById<TextView>(R.id.title)
+        title.text = openingName
+
         hintButton.setOnClickListener{
             greenSquareFactory.removeSquares()
-            println(chessBoard.fen)
-            println(chessBoard.dbHandler.getOpening(chessBoard.opening, (chessBoard.plyCounter+1)))
             if (chessBoard.dbHandler.getOpening(chessBoard.opening, (chessBoard.plyCounter+1)).isNotBlank()){
                 val squares = chessBoard.getPlayedMove(chessBoard.fen, chessBoard.dbHandler.getOpening(chessBoard.opening, (chessBoard.plyCounter+1)))
                 greenSquareFactory.addGreenSquare(squares[0])
