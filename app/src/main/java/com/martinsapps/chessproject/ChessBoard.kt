@@ -190,8 +190,6 @@ class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: I
 
         val board1 = parseFenPosition(fen1)
         val board2 = parseFenPosition(fen2)
-        println(board1)
-        println(board2)
 
         var fromSquare: Int? = null
         var toSquare: Int? = null
@@ -233,7 +231,7 @@ class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: I
         }
 
         if (fromSquare == null || toSquare == null) {
-            throw IllegalArgumentException("No valid move detected. Moves were: fromSquare=$fromSquare, toSquare=$toSquare")
+            throw IllegalArgumentException("No move fromSquare=$fromSquare, toSquare=$toSquare")
         }
 
         return if (color == 0) {
@@ -248,16 +246,14 @@ class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: I
 
     fun getPlayedMoveAlgebraicWithPiece(fen1: String, fen2: String): String {
         fun parseFenPosition(fen: String): String {
-            val rows = fen.split(" ")[0].split("/") // Get the board part and split by rows
+            val rows = fen.split(" ")[0].split("/")
             val board = StringBuilder()
 
             for (row in rows) {
                 for (char in row) {
                     if (char.isDigit()) {
-                        // Append the corresponding number of empty squares
                         repeat(char.digitToInt()) { board.append("1") }
                     } else {
-                        // Append the piece
                         board.append(char)
                     }
                 }
@@ -266,33 +262,27 @@ class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: I
         }
 
         fun indexToAlgebraic(index: Int): String {
-            val file = 'a' + (index % 8) // 'a' for column 0, 'b' for column 1, etc.
-            val rank = 8 - (index / 8) // 8 for row 0, 7 for row 1, etc.
+            val file = 'a' + (index % 8)
+            val rank = 8 - (index / 8)
             return "$file$rank"
         }
 
-        // Parse the board positions from the FEN strings
         val board1 = parseFenPosition(fen1)
         val board2 = parseFenPosition(fen2)
 
 
         if (board1[60] == 'K' && board2[60] == '1' && board2[62] == 'K') {
-            // White kingside castling (e1 to g1)
             return "0-0"
         } else if (board1[4] == 'k' && board2[4] == '1' && board2[6] == 'k') {
-            // Black kingside castling (e8 to g8)
             return "0-0"
         } else if (board1[60] == 'K' && board2[60] == '1' && board2[58] == 'K') {
-            // White queenside castling (e1 to c1)
             return "0-0-0"
         } else if (board1[4] == 'k' && board2[4] == '1' && board2[2] == 'k') {
-            // Black queenside castling (e8 to c8)
             return "0-0-0"
         }
 
 
 
-        // Initialize variables to find moved squares
         var fromSquare: Int? = null
         var toSquare: Int? = null
         var isCapture =false
@@ -306,7 +296,6 @@ class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: I
                         toSquare = i
                     }
                     board1[i] != '1' && board2[i] != '1' && board1[i].isLowerCase() != board2[i].isLowerCase() -> {
-                        // Capture occurred
                         fromSquare = fromSquare ?: i
                         toSquare = toSquare ?: i
                         isCapture= true
@@ -316,7 +305,7 @@ class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: I
         }
 
         if (fromSquare == null || toSquare == null) {
-            throw IllegalArgumentException("No valid move detected. Moves were: fromSquare=$fromSquare, toSquare=$toSquare")
+            throw IllegalArgumentException("No move fromSquare=$fromSquare, toSquare=$toSquare")
         }
 
         val fromAlgebraic = indexToAlgebraic(fromSquare)

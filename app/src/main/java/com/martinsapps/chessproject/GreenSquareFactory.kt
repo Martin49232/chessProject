@@ -11,6 +11,7 @@ import android.view.animation.Animation.AnimationListener
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import java.io.IOException
 
 
 class GreenSquareFactory(context: Context, constraintLayout: ConstraintLayout, chessBoard: ChessBoard) {
@@ -38,15 +39,19 @@ class GreenSquareFactory(context: Context, constraintLayout: ConstraintLayout, c
     }
 
     fun addDot(squareNumber: Int){
-        val dotImageView = ImageView(context)
-        dotImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.dot_green))
-        dotImageView.y = this.chessBoard.squareCoordinates[squareNumber][1].toFloat()+chessBoard.squareSize/3
-        dotImageView.x = this.chessBoard.squareCoordinates[squareNumber][0].toFloat()+chessBoard.squareSize/3
-        dotImageView.setAlpha(60)
-        constraintLayout.addView(dotImageView)
-        dotImageView.layoutParams.height = chessBoard.squareSize/3
-        dotImageView.layoutParams.width = chessBoard.squareSize/3
-        greenSquareList.add(dotImageView)
+        val settings = chessBoard.dbHandler.getSettings() ?: throw IOException()
+        val legalMoves = settings["legal_moves"].toString().toInt()
+        if (legalMoves == 1){
+            val dotImageView = ImageView(context)
+            dotImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.dot_green))
+            dotImageView.y = this.chessBoard.squareCoordinates[squareNumber][1].toFloat()+chessBoard.squareSize/3
+            dotImageView.x = this.chessBoard.squareCoordinates[squareNumber][0].toFloat()+chessBoard.squareSize/3
+            dotImageView.setAlpha(60)
+            constraintLayout.addView(dotImageView)
+            dotImageView.layoutParams.height = chessBoard.squareSize/3
+            dotImageView.layoutParams.width = chessBoard.squareSize/3
+            greenSquareList.add(dotImageView)
+        }
     }
 
     fun addRedSquare(coordinates: FloatArray){

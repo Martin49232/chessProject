@@ -14,7 +14,8 @@
         tools:targetApi="33">
         <activity
             android:name=".Settings"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SplashActivity"
             android:exported="true">
