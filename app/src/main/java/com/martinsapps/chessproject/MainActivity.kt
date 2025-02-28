@@ -12,9 +12,11 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.drawable.DrawableCompat
 import com.martinsapps.chessproject.databinding.ActivityMainBinding
 import java.io.File
@@ -36,7 +38,6 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
@@ -79,15 +80,15 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
-        val titleLayout = findViewById<LinearLayout>(R.id.titleLayout)
-        val bottomLayout = findViewById<LinearLayout>(R.id.bottomLinearLayout)
+
         val settings = findViewById<ImageButton>(R.id.settings)
         val lastPlayed = findViewById<ImageButton>(R.id.lastPlayed)
         val streak = findViewById<ImageButton>(R.id.fire)
+        val streakText = findViewById<TextView>(R.id.streakValue)
 
 
         /*
-        This code is used for streak calculation. Resets when user missed more than one day. Resets to One always.
+        This code is used for streak calculation. Resets when user missed more than one day. Resets to one always.
 
          */
 
@@ -129,7 +130,8 @@ class MainActivity : AppCompatActivity() {
 
         val currentStreak = dbHandler.getStreak()
         changeSvgFillColor(streak, R.drawable.streak_flame, 255,255,255, (255 * (1 - exp((-0.05* currentStreak)))).toInt())
-
+        streakText.text = currentStreak.toString()
+        streakText.setTextColor(Color.argb((255 * (1 - exp((-0.05* currentStreak)))).toInt(), 255, 255, 255))
 
 
         settings.setOnClickListener {

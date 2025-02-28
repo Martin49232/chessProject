@@ -3,4 +3,26 @@
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="back_button">Back Button</string>
+    <string name="logo">Logo</string>
+    <string name="white_openings">white openings</string>
+    <string name="black_openings">black openings</string>
+    <string name="title">Openingo</string>
+    <string name="openings_root">Choose an opening</string>
+    <string name="settings_moves">Show Legal Moves</string>
+    <string name="settings_sound">Choose an opening</string>
+    <string name="streak_icon">Streak icon</string>
+    <string name="settings_title">Settings</string>
+    <string name="last_played">Last played opening</string>
+    <string name="streak_value">0</string>
+    <string name="openings_white">Openings for white</string>
+    <string name="openings_black">Openings for black</string>
+    <string name="hint">Hint</string>
+    <string name="move_back">move back</string>
+    <string name="move_forward">move forward</string>
+    <string name="move_forward_button">❯</string>
+    <string name="move_back_button">❮</string>
+
+
+    Show Legal Moves
 </resources>

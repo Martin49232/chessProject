@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/app_icon_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ChessProject"
+        android:theme="@style/BaseAppTheme"
         tools:targetApi="33">
         <activity
             android:name=".Settings"

@@ -54,7 +54,7 @@ class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: I
         val screenRatio = screenWidth.toFloat()/screenHeight.toFloat()
         this.screenWidth = screenWidth
         this.screenHeight=screenHeight
-        this.startY= round((screenHeight/(screenRatio*7)))
+        this.startY = round((screenHeight/(screenRatio*7)))
         this.startX = 0F
         this.squareSize = (screenWidth/8)
         this.squareCoordinates = squareCoordinates(startY, startX, squareSize.toFloat())

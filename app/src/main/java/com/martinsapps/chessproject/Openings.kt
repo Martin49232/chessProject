@@ -8,6 +8,7 @@ import android.media.Image
 import android.os.Build
 import android.os.Bundle
 import android.transition.Explode
+import android.util.Log
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Button
@@ -31,9 +32,12 @@ class Openings : AppCompatActivity() {
         setContentView(R.layout.openings_layout)
 
         val constraintLayout = findViewById<ConstraintLayout>(R.id.cl)
+
         val screenWidth = getScreenWidth()
         val screenHeight = getScreenHeight()
-        enableEdgeToEdge()
+
+        //enableEdgeToEdge()
+        //enabling edge to edge braeks the code!!! I forgot and waster few hours
         supportActionBar?.hide()
         changeTheAnnoyingBar()
 
@@ -68,9 +72,6 @@ class Openings : AppCompatActivity() {
         val greenSquareFactory = GreenSquareFactory(this, constraintLayout, chessBoard)
 
 
-
-
-        val titleLayout = findViewById<LinearLayout>(R.id.titleLayout)
 
         if (dbOpeningName != null && openingName != null) {
             dbHandler.updateLastPlayed(dbOpeningName, color, openingName)

@@ -133,7 +133,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
             chessBoard.greenSquareImageView = chessBoard.createGreenSquare(
                 context,
                 imageView.x,
-                imageView.y,
+                getImageViewY(this.imageView),
                 imageView.layoutParams.height,
                 constraintLayout
             )
@@ -145,7 +145,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
             val pseudoLegalMoves = mutableListOf<Move>()
             var position = 0
             for (i in 0 until chessBoard.squareCoordinates.size) {
-                if (this.imageView.x.toInt() == chessBoard.squareCoordinates[i][0] && this.imageView.y.toInt() == chessBoard.squareCoordinates[i][1]) {
+                if (this.imageView.x.toInt() == chessBoard.squareCoordinates[i][0] && getImageViewY(this.imageView).toInt() == chessBoard.squareCoordinates[i][1]) {
                     position = i
                 }
             }
@@ -169,7 +169,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
 
                 var pieceClickedPosition = 0
                 for (i in 0 until chessBoard.squareCoordinates.size) {
-                    if (chessBoard.pieceClicked!!.x.toInt() == chessBoard.squareCoordinates[i][0] && chessBoard.pieceClicked!!.y.toInt() == chessBoard.squareCoordinates[i][1]) {
+                    if (chessBoard.pieceClicked!!.x.toInt() == chessBoard.squareCoordinates[i][0] && getImageViewY(chessBoard.pieceClicked!!).toInt() == chessBoard.squareCoordinates[i][1]) {
                         pieceClickedPosition = i
                     }
                 }
@@ -182,39 +182,39 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                             //castling
                             if (((move.flag == Move.KING_CASTLE && 'k' == ChessBoard.mapOfNotationToImages[chessBoard.pieceClicked!!.tag])|| (move.flag == Move.KING_CASTLE && 'K' == ChessBoard.mapOfNotationToImages[chessBoard.pieceClicked!!.tag]))&&chessBoard.color==0){
                                 imageView.x = chessBoard.pieceClicked!!.x +chessBoard.squareSize
-                                imageView.y = chessBoard.pieceClicked!!.y
+                                imageView.y = getImageViewY(chessBoard.pieceClicked!!)
                                 chessBoard.pieceClicked!!.x += 2*chessBoard.squareSize
-                                movingPiece(1, floatArrayOf(imageView.x, imageView.y))
+                                movingPiece(1, floatArrayOf(imageView.x, getImageViewY(this.imageView)))
                                 return@setOnClickListener
                             }
 
                             if (((move.flag == Move.QUEEN_CASTLE && 'K' == ChessBoard.mapOfNotationToImages[chessBoard.pieceClicked!!.tag])|| (move.flag == Move.QUEEN_CASTLE && 'k' == ChessBoard.mapOfNotationToImages[chessBoard.pieceClicked!!.tag]))&&chessBoard.color==0){
                                 imageView.x = chessBoard.pieceClicked!!.x -chessBoard.squareSize
-                                imageView.y = chessBoard.pieceClicked!!.y
+                                imageView.y = getImageViewY(chessBoard.pieceClicked!!)
                                 chessBoard.pieceClicked!!.x -= 2*chessBoard.squareSize
-                                movingPiece(1, floatArrayOf(imageView.x, imageView.y))
+                                movingPiece(1, floatArrayOf(imageView.x, getImageViewY(this.imageView)))
                                 return@setOnClickListener
                             }
 
                             if (((move.flag == Move.KING_CASTLE && 'k' == ChessBoard.mapOfNotationToImages[chessBoard.pieceClicked!!.tag])|| (move.flag == Move.KING_CASTLE && 'K' == ChessBoard.mapOfNotationToImages[chessBoard.pieceClicked!!.tag]))&&chessBoard.color==1){
                                 imageView.x = chessBoard.pieceClicked!!.x -chessBoard.squareSize
-                                imageView.y = chessBoard.pieceClicked!!.y
+                                imageView.y = getImageViewY(chessBoard.pieceClicked!!)
                                 chessBoard.pieceClicked!!.x -= 2*chessBoard.squareSize
-                                movingPiece(1, floatArrayOf(imageView.x, imageView.y))
+                                movingPiece(1, floatArrayOf(imageView.x, getImageViewY(this.imageView)))
                                 return@setOnClickListener
                             }
 
                             if (((move.flag == Move.QUEEN_CASTLE && 'K' == ChessBoard.mapOfNotationToImages[chessBoard.pieceClicked!!.tag])|| (move.flag == Move.QUEEN_CASTLE && 'k' == ChessBoard.mapOfNotationToImages[chessBoard.pieceClicked!!.tag]))&&chessBoard.color==1){
                                 imageView.x = chessBoard.pieceClicked!!.x +chessBoard.squareSize
-                                imageView.y = chessBoard.pieceClicked!!.y
+                                imageView.y = getImageViewY(chessBoard.pieceClicked!!)
                                 chessBoard.pieceClicked!!.x += 2*chessBoard.squareSize
-                                movingPiece(1, floatArrayOf(imageView.x, imageView.y))
+                                movingPiece(1, floatArrayOf(imageView.x, getImageViewY(this.imageView)))
                                 return@setOnClickListener
                             }
 
 
                             chessBoard.pieceClicked!!.x = imageView.x
-                            chessBoard.pieceClicked!!.y = imageView.y
+                            chessBoard.pieceClicked!!.y = getImageViewY(this.imageView)
 
                             for (i in 0 until chessBoard.pieces.size) {
                                 if (chessBoard.pieces[i] == imageView) {
@@ -225,7 +225,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                             removePiece()
                             constraintLayout.setOnTouchListener(null)
                             chessBoard.pieceClicked = null
-                            movingPiece(2, floatArrayOf(imageView.x, imageView.y))
+                            movingPiece(2, floatArrayOf(imageView.x, getImageViewY(this.imageView)))
                             return@setOnClickListener
                         }
                     }
@@ -239,7 +239,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                 chessBoard.greenSquareImageView = chessBoard.createGreenSquare(
                     context,
                     imageView.x,
-                    imageView.y,
+                    getImageViewY(this.imageView),
                     imageView.layoutParams.height,
                     constraintLayout
                 )
@@ -247,7 +247,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                 val pseudoLegalMoves = mutableListOf<Move>()
                 var position = 0
                 for (i in 0 until chessBoard.squareCoordinates.size) {
-                    if (this.imageView.x.toInt() == chessBoard.squareCoordinates[i][0] && this.imageView.y.toInt() == chessBoard.squareCoordinates[i][1]) {
+                    if (this.imageView.x.toInt() == chessBoard.squareCoordinates[i][0] && getImageViewY(this.imageView).toInt() == chessBoard.squareCoordinates[i][1]) {
                         position = i
                     }
                 }
@@ -302,6 +302,10 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
             }
             imageView.bringToFront()
         }
+    }
+
+    fun getImageViewY(imageView: ImageView): Float {
+        return (imageView.y)
     }
 }
 
