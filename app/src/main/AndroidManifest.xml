@@ -13,9 +13,22 @@
         android:theme="@style/Theme.ChessProject"
         tools:targetApi="33">
         <activity
-            android:name=".OpeningsRoot"
+            android:name=".Settings"
             android:exported="false"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".OpeningsRoot"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Openings"
             android:exported="false"
@@ -24,12 +37,6 @@
             android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

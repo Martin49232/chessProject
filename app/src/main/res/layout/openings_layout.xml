@@ -1,124 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl"
-    android:background="@color/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".Openings">
-
 
     <LinearLayout
         android:id="@+id/titleLayout"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         android:background="@color/panel"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        android:paddingVertical="16dp"
+        app:layout_constraintHeight_percent="0.125"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.025">
+        app:layout_constraintVertical_bias="0.025"
+        tools:layout_editor_absoluteX="0dp">
 
         <ImageButton
             android:id="@+id/back"
             style="?android:attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:width="50dp"
-            android:textStyle="bold"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:padding="8dp"
             app:srcCompat="@drawable/back_arrow" />
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:fontFamily="sans-serif"
             android:gravity="center"
-            android:text="Chess opening"
+            android:text="Openingo"
             android:textColor="@color/white"
-            android:textSize="32sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             app:srcCompat="@drawable/svglogo" />
-
-
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_margin="0dp"
-        android:layout_weight="1"
-        android:background="@color/panel"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+
+    <HorizontalScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@+id/controlLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toBottomOf="@+id/titleLayout"
+        app:layout_constraintVertical_bias="0.038">
+
+        <TextView
+            android:id="@+id/notation"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </HorizontalScrollView>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/controlLayout"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_weight="1"
+        android:background="@color/panel"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:padding="0dp">
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintStart_toStartOf="parent">
 
-            <ImageButton
-                android:id="@+id/hint"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"
-                android:width="120dp"
-                android:backgroundTint="@color/panel"
-                app:srcCompat="@drawable/light_bulb" />
+        <ImageButton
+            android:id="@+id/hint"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:scaleType="fitCenter"
+            android:src="@drawable/light_bulb" />
 
-            <Button
-                android:id="@+id/moveBack"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"
-                android:width="120dp"
-                android:backgroundTint="@color/panel"
-                android:fontFamily="sans-serif"
-                android:text="❮"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+        <Button
+            android:id="@+id/moveBack"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="❮"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/moveForward"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"
-                android:width="120dp"
-                android:backgroundTint="@color/panel"
-                android:fontFamily="sans-serif"
-                android:text="❯"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+        <Button
+            android:id="@+id/moveForward"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="❯"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-        </LinearLayout>
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

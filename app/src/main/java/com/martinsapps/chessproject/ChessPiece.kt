@@ -5,6 +5,7 @@ import android.content.Context
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import kotlin.math.ceil
 import kotlin.math.floor
 
 class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,color: Int,  chessBoard: ChessBoard,
@@ -43,6 +44,8 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
         const val WHITE_PAWN = R.drawable.white_pawn
     }
 
+
+    // Draws piece using ImageView. Than calls the monstrosity makePieceClickable()
     fun drawPiece(x: Float, y: Float, width: Int, height: Int): ImageView {
         constraintLayout.removeView(imageView)
         imageView.setImageDrawable(ContextCompat.getDrawable(context, ID))
@@ -64,22 +67,65 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
 
     }
 
-
+    /*
+    This code is a problem. Im lucky it didnt break :D. We set a ClickListener on the image view that waits for the click event.
+    Than the function creates legal moves where they are legal. Creates sound effects, visual effects, resets the position if the user fucks up.
+    Than we set a constraintLayout.setOnTouchListener that listens for lick on the constrant layout. Than the function gets the x and y coordianates and cheks if the move
+    is legal using the native function and not out of bounds using the methods defined in ChessBoard.
+     */
     @SuppressLint("ClickableViewAccessibility")
     private fun makePieceClickable() {
-        fun movingPiece(){
+
+        /*
+        this is a function that is called whenever a piece is moved. It checks if the move is in the opening database. And than acts accordingly
+         */
+        fun movingPiece(moveType: Int, position: FloatArray){
+            if ((chessBoard.dbHandler.getOpening(chessBoard.opening, (chessBoard.plyCounter+1)).isNotBlank())){
+                val algebraic = chessBoard.getPlayedMoveAlgebraicWithPiece(chessBoard.fen, chessBoard.dbHandler.getOpening(chessBoard.opening, (chessBoard.plyCounter+1)))
+                chessBoard.notationTextView.append(" $algebraic")
+            }
+
             chessBoard.plyCounter+=1
             squareFactory.removeSquares()
             chessBoard.removeGreenSquare(constraintLayout)
             chessBoard.turn = !chessBoard.turn
             chessBoard.fen = chessBoard.generateFen(color)
             chessBoard.previousMovesMovedBackList = mutableListOf()
-            /*if (chessBoard.dbHandler.getOpening(chessBoard.opening, (chessBoard.plyCounter)) != chessBoard.fen){
+
+            if (chessBoard.dbHandler.getOpening(chessBoard.opening, (chessBoard.plyCounter)) != (chessBoard.fen.split(" "))[0]){
+                chessBoard.notationTextView.text = ""
+                chessBoard.soundPlayer.playWrongSound()
+                squareFactory.addRedSquare(position)
+
                 chessBoard.fen = ChessBoard.BASIC_CHESS_SETTINGS
                 chessBoard.plyCounter = 0
                 chessBoard.turn = true
-            }*/
-            //TODO dodelat kontrolu tahu
+                chessBoard.removePieces(constraintLayout)
+                chessBoard.pieceClicked = null
+                chessBoard.previousMovesMovedBackList = mutableListOf()
+                chessBoard.previousMovesList = mutableListOf(chessBoard.fen)
+                chessBoard.drawPieces(chessBoard.fen.toCharArray(), chessBoard.startY, chessBoard.startX, chessBoard.squareSize.toFloat(), constraintLayout, chessBoard.squareSize, chessBoard, squareFactory, color, context, chessBoard.screenWidth)
+                return
+            }else{
+                if (chessBoard.dbHandler.getOpening(chessBoard.opening, (chessBoard.plyCounter+1)).isBlank()){
+                    chessBoard.fen = ChessBoard.BASIC_CHESS_SETTINGS
+                    chessBoard.plyCounter = 0
+                    chessBoard.turn = true
+                    chessBoard.removePieces(constraintLayout)
+                    chessBoard.pieceClicked = null
+                    chessBoard.previousMovesMovedBackList = mutableListOf()
+                    chessBoard.previousMovesList = mutableListOf(chessBoard.fen)
+                    chessBoard.notationTextView.text = ""
+                    chessBoard.drawPieces(chessBoard.fen.toCharArray(), chessBoard.startY, chessBoard.startX, chessBoard.squareSize.toFloat(), constraintLayout, chessBoard.squareSize, chessBoard, squareFactory, color, context, chessBoard.screenWidth)
+                    chessBoard.soundPlayer.playGoodSound()
+                    return
+                }
+            }
+            when(moveType){
+                1->chessBoard.soundPlayer.playMoveSound()
+                2->chessBoard.soundPlayer.playCaptureSound()
+            }
+
         }
 
         imageView.setOnClickListener {
@@ -138,8 +184,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                                 imageView.x = chessBoard.pieceClicked!!.x +chessBoard.squareSize
                                 imageView.y = chessBoard.pieceClicked!!.y
                                 chessBoard.pieceClicked!!.x += 2*chessBoard.squareSize
-                                movingPiece()
-                                chessBoard.soundPlayer.playMoveSound()
+                                movingPiece(1, floatArrayOf(imageView.x, imageView.y))
                                 return@setOnClickListener
                             }
 
@@ -147,8 +192,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                                 imageView.x = chessBoard.pieceClicked!!.x -chessBoard.squareSize
                                 imageView.y = chessBoard.pieceClicked!!.y
                                 chessBoard.pieceClicked!!.x -= 2*chessBoard.squareSize
-                                movingPiece()
-                                chessBoard.soundPlayer.playMoveSound()
+                                movingPiece(1, floatArrayOf(imageView.x, imageView.y))
                                 return@setOnClickListener
                             }
 
@@ -156,8 +200,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                                 imageView.x = chessBoard.pieceClicked!!.x -chessBoard.squareSize
                                 imageView.y = chessBoard.pieceClicked!!.y
                                 chessBoard.pieceClicked!!.x -= 2*chessBoard.squareSize
-                                movingPiece()
-                                chessBoard.soundPlayer.playMoveSound()
+                                movingPiece(1, floatArrayOf(imageView.x, imageView.y))
                                 return@setOnClickListener
                             }
 
@@ -165,8 +208,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                                 imageView.x = chessBoard.pieceClicked!!.x +chessBoard.squareSize
                                 imageView.y = chessBoard.pieceClicked!!.y
                                 chessBoard.pieceClicked!!.x += 2*chessBoard.squareSize
-                                movingPiece()
-                                chessBoard.soundPlayer.playMoveSound()
+                                movingPiece(1, floatArrayOf(imageView.x, imageView.y))
                                 return@setOnClickListener
                             }
 
@@ -183,8 +225,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                             removePiece()
                             constraintLayout.setOnTouchListener(null)
                             chessBoard.pieceClicked = null
-                            movingPiece()
-                            chessBoard.soundPlayer.playCaptureSound()
+                            movingPiece(2, floatArrayOf(imageView.x, imageView.y))
                             return@setOnClickListener
                         }
                     }
@@ -243,10 +284,10 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                                         chessBoard.squareSize,
                                         chessBoard.squareSize
                                     )
-                                    chessBoard.turn = !chessBoard.turn
-                                    chessBoard.fen = chessBoard.generateFen(color)
-                                    chessBoard.soundPlayer.playMoveSound()
-                                    chessBoard.previousMovesMovedBackList = mutableListOf()
+                                    movingPiece(1, floatArrayOf(closestSquare[0].toFloat(), closestSquare[1].toFloat()))
+                                    chessBoard.pieceClicked = null
+                                    constraintLayout.setOnTouchListener(null)
+                                    return@setOnTouchListener true
                                 }
                             }
                         }

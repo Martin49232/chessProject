@@ -764,12 +764,22 @@ static Bitboard pseudo_white_pawn_moves(Bitboard pawn, Bitboard friendly_pieces,
         pseudo_moves[pseudo_moves_counter] = create_move(BISHOP_PROMOTION, pawn_position, pawn_position-8);
     }
     else{
-        if(pawn>>8&((~opponent_pieces)|(friendly_pieces))){
-            pseudo_legal_pawn_moves = (pseudo_legal_pawn_moves|(pawn>>8)) &((~opponent_pieces)|(friendly_pieces));
+        if((pawn>>8) & (~((opponent_pieces)|(friendly_pieces)))){
+            pseudo_legal_pawn_moves = (pseudo_legal_pawn_moves|(pawn>>8)) & (~((opponent_pieces)|(friendly_pieces)));
             pseudo_moves_counter+=1;
             pseudo_moves[pseudo_moves_counter] = create_move(QUIET_MOVES, pawn_position, pawn_position-8);
         }
+
+
+        /*if(pawn<<8&(~((opponent_pieces)|(friendly_pieces)))){
+            pseudo_legal_pawn_moves = (pseudo_legal_pawn_moves|(pawn<<8)) &(~((opponent_pieces)|(friendly_pieces)));
+            pseudo_moves_counter+=1;
+            pseudo_moves[pseudo_moves_counter] = create_move(QUIET_MOVES, pawn_position, pawn_position+8);
+        }*/
+
     }
+
+
 
     if(opponent_pieces&(soEaOne(pawn))){
         if(pawn&~not_seventh_rank){

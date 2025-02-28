@@ -70,36 +70,10 @@ class OpeningsRoot : AppCompatActivity() {
         val screenWidth = getScreenWidth()
         val screenHeight = getScreenHeight()
 
-        //val cl = findViewById<ConstraintLayout>(R.id.constraintLayout)
-        //val sv = findViewById<ScrollView>(R.id.scrollView)
         val scrollViewLinearLayout = findViewById<LinearLayout>(R.id.scrollViewLinearLayout)
 
-        //val buttonList = mutableListOf<ImageButton>()
 
-        val titleLayout = findViewById<LinearLayout>(R.id.titleLayout)
-        titleLayout.requestLayout()
-        titleLayout.layoutParams.width = screenWidth
-        titleLayout.layoutParams.height = screenHeight/8
-
-        backButton.requestLayout()
-        backButton.layoutParams.width = screenWidth/4
-        backButton.layoutParams.height = screenWidth/4
-
-        val title = findViewById<TextView>(R.id.title)
-        title.requestLayout()
-        title.textSize = 32F
-        title.layoutParams.width = screenWidth/2
-        title.layoutParams.height = screenHeight/8
-
-        val logo = findViewById<ImageView>(R.id.logo)
-        logo.requestLayout()
-        logo.layoutParams.width = screenWidth/4
-        logo.layoutParams.height = screenWidth/4
-
-
-        // Loop through items, adding rows of two
         for (i in openings.indices step 2) {
-            // Create a horizontal row
             val rowLayout = LinearLayout(this).apply {
                 orientation = LinearLayout.HORIZONTAL
                 layoutParams = LinearLayout.LayoutParams(
@@ -111,23 +85,18 @@ class OpeningsRoot : AppCompatActivity() {
                 gravity = Gravity.CENTER_HORIZONTAL
             }
 
-            // Add first item to the row
             rowLayout.addView(createItemView(openings[i]))
 
-            // Add second item to the row if it exists
             if (i + 1 < openings.size) {
                 rowLayout.addView(createItemView(openings[i+1]))
             } else {
-                //Add an empty spacer to balance the row
                 rowLayout.addView(spacerView(this))
             }
 
-            // Add the row to the container
             scrollViewLinearLayout.addView(rowLayout)
         }
     }
 
-    // Function to create individual item views
     private fun createItemView(dbName: String): View {
         val itemLayout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -175,7 +144,6 @@ class OpeningsRoot : AppCompatActivity() {
         return itemLayout
     }
 
-    // Function to create a spacer view
     private fun spacerView(context: Context): View {
         return View(context).apply {
             layoutParams = LinearLayout.LayoutParams(0, 0, 1f)
@@ -191,7 +159,7 @@ class OpeningsRoot : AppCompatActivity() {
             "giuoco_piano" to "Giuoco Piano",
             "giuoco_piano_center_attack" to "Giuoco Piano Center Attack",
             "giuoco_piano_greco_attack" to "Giuoco Piano Greco Attack",
-            "giuoco_pianissimo" to "Giuocp Pianissimo",
+            "giuoco_pianissimo" to "Giuoco Pianissimo",
             "giuoco_piano_second_line" to "Giuoco Piano Second Line",
             "evans_gambit" to "Evans Gambit",
             "evans_accepted_anderssen" to "Evans Gambit Anderssen",

@@ -2,27 +2,32 @@ package com.martinsapps.chessproject
 
 import android.content.Intent
 import android.content.res.Resources
+import android.graphics.Color
 import android.graphics.Point
+import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.transition.Explode
 import android.view.WindowInsets
 import android.view.WindowManager
-import android.widget.Button
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.graphics.drawable.DrawableCompat
 import com.martinsapps.chessproject.databinding.ActivityMainBinding
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.temporal.ChronoUnit
+import kotlin.math.exp
 
 class MainActivity : AppCompatActivity() {
 
@@ -48,8 +53,15 @@ class MainActivity : AppCompatActivity() {
         val screenHeight = getScreenHeight()
 
 
-        if (!checkDB()){
+        /*
+        creates the database instance and than checks if the app is oppened for the first time (database is not yet installed). If it isnt installs database
+        and starts counting streak.
+         */
+        val dbHandler = DbHandler(applicationContext, "openings.db", null, 1)
+        if (!checkDB()) {
             copyDataBase()
+            val milliseconds = System.currentTimeMillis()
+            dbHandler.updateStreak(1, milliseconds)
         }
 
         val whiteOpenings = findViewById<ImageButton>(R.id.white)
@@ -69,45 +81,108 @@ class MainActivity : AppCompatActivity() {
 
         val titleLayout = findViewById<LinearLayout>(R.id.titleLayout)
         val bottomLayout = findViewById<LinearLayout>(R.id.bottomLinearLayout)
-        val settings = findViewById<Button>(R.id.settings)
-        val lastPlayed = findViewById<Button>(R.id.lastPlayed)
-
-        titleLayout.requestLayout()
-        titleLayout.layoutParams.width = screenWidth
-        titleLayout.layoutParams.height = screenHeight/8
+        val settings = findViewById<ImageButton>(R.id.settings)
+        val lastPlayed = findViewById<ImageButton>(R.id.lastPlayed)
+        val streak = findViewById<ImageButton>(R.id.fire)
 
 
-        val title = findViewById<TextView>(R.id.title)
-        title.requestLayout()
-        title.textSize = 32F
-        title.layoutParams.width = screenWidth/2
-        title.layoutParams.height = screenHeight/8
+        /*
+        This code is used for streak calculation. Resets when user missed more than one day. Resets to One always.
 
-        bottomLayout.requestLayout()
-        bottomLayout.layoutParams.width = screenWidth
-        bottomLayout.layoutParams.height = screenHeight / 8
+         */
 
-        settings.requestLayout();
-        settings.layoutParams.height = screenHeight / 16
-        settings.layoutParams.width = (screenWidth / 2.5).toInt()
-
-        lastPlayed.requestLayout();
-        lastPlayed.layoutParams.height = screenHeight / 16
-        lastPlayed.layoutParams.width = (screenWidth / 2.5).toInt()
-
-        whiteOpenings.requestLayout();
-        whiteOpenings.layoutParams.height = screenWidth / 2
-        whiteOpenings.layoutParams.width = screenWidth / 2
-
-        blackOpenings.requestLayout();
-        blackOpenings.layoutParams.height = screenWidth / 2
-        blackOpenings.layoutParams.width = screenWidth / 2
+        val timeStamp = dbHandler.getLastTimeStamp()
 
 
-        settings.setOnClickListener{
+        val now = LocalDateTime.now()
+
+        val yearNow = now.year
+        val datOfMonthNow = now.dayOfMonth
+        val monthOfYearNow = now.month
+
+        val instant = Instant.ofEpochMilli(timeStamp)
+        val zonedDateTime = instant.atZone(ZoneId.systemDefault())
+
+        val year = zonedDateTime.year
+        val monthOfYear = zonedDateTime.monthValue
+        val dayOfMonth = zonedDateTime.dayOfMonth
+
+
+        val startDate = LocalDate.of(year, monthOfYear, dayOfMonth)
+        val endDate = LocalDate.of(yearNow, monthOfYearNow, datOfMonthNow)
+
+        val daysBetween = ChronoUnit.DAYS.between(startDate, endDate)
+
+        if (daysBetween == 1L){
+            var streakCurrent = dbHandler.getStreak()
+            streakCurrent +=1
+            val milliseconds = System.currentTimeMillis()
+            dbHandler.updateStreak(streakCurrent, milliseconds)
+        }
+        else if (daysBetween > 1){
+            val milliseconds = System.currentTimeMillis()
+            dbHandler.updateStreak(1, milliseconds)
+        }else if (daysBetween < 0){
+            val milliseconds = System.currentTimeMillis()
+            dbHandler.updateStreak(1, milliseconds)
+        }
+
+        val currentStreak = dbHandler.getStreak()
+        changeSvgFillColor(streak, R.drawable.streak_flame, 255,255,255, (255 * (1 - exp((-0.05* currentStreak)))).toInt())
+
+
+
+        settings.setOnClickListener {
+            //Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, Settings::class.java)
+            this.startActivity(intent)
+            finish()
+        }
+
+        lastPlayed.setOnClickListener {
+            //Toast.makeText(this, "Last Trained Openings", Toast.LENGTH_SHORT).show()
+            val opening = dbHandler.getLastPlayed()
+            if (opening == null) {
+                Toast.makeText(this, "You need to play an opening first", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val dbName = opening["table_name"].toString()
+            val color = opening["color"].toString().toInt()
+            val name = opening["name"].toString()
+
+            val intent = Intent(this, Openings::class.java)
+            intent.putExtra("opening", dbName)
+            intent.putExtra("color", color)
+            intent.putExtra("name", name)
+
+            this.startActivity(intent)
+            finish()
 
         }
+
+        streak.setOnClickListener {
+            val streakNumber = dbHandler.getStreak()
+
+            val string = "Your current streak is $streakNumber days"
+            Toast.makeText(this, string, Toast.LENGTH_SHORT).show()
+        }
     }
+
+    private fun changeSvgFillColor(imageButton: ImageButton, svgDrawableRes: Int, red: Int, green: Int, blue: Int, alpha: Int) {
+        //Get the SVG drawable from resources
+        val drawable: Drawable? = AppCompatResources.getDrawable(imageButton.context, svgDrawableRes)
+
+        if (drawable != null) {
+            val wrappedDrawable = DrawableCompat.wrap(drawable)
+            val color = Color.argb(alpha, red, green, blue)
+
+            DrawableCompat.setTint(wrappedDrawable, color)
+
+            imageButton.setImageDrawable(wrappedDrawable)
+        }
+    }
+
+
 
     private fun getScreenWidth(): Int {
         return Resources.getSystem().displayMetrics.widthPixels
@@ -162,4 +237,5 @@ class MainActivity : AppCompatActivity() {
         super.finish()
         overridePendingTransition(R.anim.popup_enter, R.anim.popup_exit)
     }
+
 }
