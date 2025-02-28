@@ -20,6 +20,7 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -40,13 +41,25 @@ class OpeningsRoot : AppCompatActivity() {
         setContentView(binding.root)
 
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        //enableEdgeToEdge()
         setContentView(R.layout.activity_openings_root)
         // Set the enter and exit transitions
         //overridePendingTransition(
         //    abc_popup_enter,
         //    abc_popup_exit
         //)
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@OpeningsRoot, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        })
+
+
+
+
         val dbHandler = DbHandler(applicationContext, "openings.db", null, 1)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -224,6 +237,5 @@ class OpeningsRoot : AppCompatActivity() {
         super.finish()
         overridePendingTransition(R.anim.popup_enter, R.anim.popup_exit)
     }
-
 
 }

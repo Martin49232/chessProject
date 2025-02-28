@@ -16,6 +16,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -41,6 +42,8 @@ class Openings : AppCompatActivity() {
         supportActionBar?.hide()
         changeTheAnnoyingBar()
 
+
+
         val moveBackButton = findViewById<Button>(R.id.moveBack)
         val moveForwardButton = findViewById<Button>(R.id.moveForward)
         val notationTextView = findViewById<TextView>(R.id.notation)
@@ -49,6 +52,19 @@ class Openings : AppCompatActivity() {
         val color = intent.getIntExtra("color", 0)
         val dbOpeningName = intent.getStringExtra("opening")
         val openingName = intent.getStringExtra("name")
+
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@Openings, OpeningsRoot::class.java)
+                intent.putExtra("color", color)
+                startActivity(intent)
+                finish()
+            }
+        })
+
+
+
 
         val backButton = findViewById<ImageView>(R.id.back)
         backButton.setOnClickListener {

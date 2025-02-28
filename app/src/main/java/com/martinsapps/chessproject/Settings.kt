@@ -30,7 +30,7 @@ class Settings : AppCompatActivity() {
         setContentView(binding.root)
 
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        //enableEdgeToEdge()
         setContentView(R.layout.activity_settings)
         //ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
         //    val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
