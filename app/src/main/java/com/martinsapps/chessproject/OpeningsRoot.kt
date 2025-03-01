@@ -167,17 +167,26 @@ class OpeningsRoot : AppCompatActivity() {
 
     private fun getName(dbName: String): String? {
         val names = mapOf(
-            "fried_liver" to "Fried Liver",
+            "italian_fried_liver" to "Italian: Fried Liver",
             "najdorf" to "Najdorf",
-            "giuoco_piano" to "Giuoco Piano",
-            "giuoco_piano_center_attack" to "Giuoco Piano Center Attack",
-            "giuoco_piano_greco_attack" to "Giuoco Piano Greco Attack",
+            "sicilian_grand_prix" to "Sicilian: Grand Prix",
+            "sicilian_grand_prix_d6" to "Sicilian: Grand Prix, 2...d6",
+            "giuoco_piano" to "Giuoco Piano: Main Line",
+            "giuoco_piano_center_attack" to "Giuoco Piano: Center Attack",
+            "giuoco_piano_greco_attack" to "Giuoco Piano: Greco Attack",
             "giuoco_pianissimo" to "Giuoco Pianissimo",
             "giuoco_piano_second_line" to "Giuoco Piano Second Line",
             "evans_gambit" to "Evans Gambit",
-            "evans_accepted_anderssen" to "Evans Gambit Anderssen",
+            "italian_evans_accepted_anderssen" to "Evans Gambit Anderssen",
+            "italian_evans_accepted_mcdonnell" to "Evans Gambit: McDonnell",
+            "italian_evans_accepted_bronstein" to "Evans Gambit: Bronstein",
             "evans_declined" to "Evans Declined",
-            "classical_nimzo_indian_defence" to "Classical Nimzo Indian Defence"
+            "italian_evans_declined_showalter" to "Evans Declined: Showalter",
+            "classical_nimzo_indian_defence" to "Classical Nimzo Indian Defence",
+            "italian_polerio_defense" to "Italian: Polerio Defense",
+            "italian_polerio_defense_check" to "Italian: Polerio, Bishop Check",
+            "caro_spassky_lobron" to  "Caro-Kann: Spassky, Lobron",
+            "caro_spassky_qc7" to  "Caro-Kann: Spassky 10...Qc7"
         )
         return if (names[dbName] != null) {
             names[dbName]
@@ -189,17 +198,26 @@ class OpeningsRoot : AppCompatActivity() {
 
     private fun getImage(dbName: String): Int? {
         val images = mapOf(
-            "fried_liver" to R.drawable.fried_liver,
+            "italian_fried_liver" to R.drawable.fried_liver,
             "najdorf" to R.drawable.sicilian_najdorf,
+            "sicilian_grand_prix" to R.drawable.sicilian_grand_prix,
+            "sicilian_grand_prix_d6" to R.drawable.sicilian_grand_prix_d6,
             "giuoco_piano" to R.drawable.giuoco_piano,
             "giuoco_piano_center_attack" to R.drawable.giuoco_piano_center_attack,
             "giuoco_piano_greco_attack" to R.drawable.giuoco_piano_greco_attack,
             "giuoco_pianissimo" to R.drawable.giuoco_pianissimo,
             "giuoco_piano_second_line" to R.drawable.giuoco_piano_second_line,
             "evans_gambit" to R.drawable.evans_gambit,
-            "evans_accepted_anderssen" to R.drawable.evans_accepted_anderssen,
+            "italian_evans_accepted_anderssen" to R.drawable.evans_accepted_anderssen,
+            "italian_evans_accepted_mcdonnell" to R.drawable.italian_evans_mcdonnell,
+            "italian_evans_accepted_bronstein" to R.drawable.italian_evans_bronstein,
             "evans_declined" to R.drawable.evans_declined,
-            "classical_nimzo_indian_defence" to R.drawable.classical_nimzo_indian_defence
+            "italian_evans_declined_showalter" to R.drawable.italian_evans_declined_showalter,
+            "classical_nimzo_indian_defence" to R.drawable.classical_nimzo_indian_defence,
+            "italian_polerio_defense" to R.drawable.italian_polerio_defense,
+            "italian_polerio_defense_check" to R.drawable.italian_polerio_defense_check,
+            "caro_spassky_lobron" to  R.drawable.caro_spassky_lobron,
+            "caro_spassky_qc7" to  R.drawable.caro_spassky_qc7
         )
         return if (images[dbName] != null) {
             images[dbName]

@@ -3,6 +3,7 @@ package com.martinsapps.chessproject
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import org.json.JSONArray
 
 class DbHandler
     (context: Context?, name: String?, factory: SQLiteDatabase.CursorFactory?, version: Int) :
@@ -12,7 +13,7 @@ class DbHandler
 
     override fun onUpgrade(sqLiteDatabase: SQLiteDatabase, i: Int, i1: Int) {}
 
-    fun getOpening(openingsName: String?, move: Int): String{
+    /*fun getOpening(openingsName: String?, move: Int): String{
         if (openingsName == null){
             throw IllegalArgumentException("You tried to search for table with name null you fucking donkey")
         }
@@ -26,7 +27,44 @@ class DbHandler
         cursor.close()
         db.close()
         return returnString
+    }*/
+
+    //function for new database structure
+    fun getOpening(openingName: String?, move: Int): String {
+        if (openingName == null){
+            throw IllegalArgumentException("You tried to search for table with name null you fucking donkey")
+        }
+        val db = readableDatabase
+        val cursor = db.rawQuery(
+            "SELECT fen_array FROM openings WHERE opening_name = ?",
+            arrayOf(openingName)
+        )
+
+        var fenList: List<String>? = null
+        if (cursor.moveToFirst()) {
+            val jsonArray = JSONArray(cursor.getString(0))
+            fenList = mutableListOf()
+            for (i in 0 until jsonArray.length()) {
+                fenList.add(jsonArray.getString(i))
+            }
+        }
+
+        cursor.close()
+        db.close()
+        if (fenList!= null){
+            if (move-1 >= fenList.size){
+                return ""
+            }
+            val returnString = fenList[move-1]
+            return returnString
+        }else {
+            throw IllegalArgumentException("The opening is empty")
+        }
     }
+
+
+
+
 
     fun getSettings(): Map<String, Any>? {
         val db = this.readableDatabase
@@ -59,8 +97,14 @@ class DbHandler
 
         cursor.close()
         db.close()
+        if (settingsMap.isEmpty()){
+            updateSettings("green_chess_board", 1, 1)
+            settingsMap["chessboard"] = "green_chess_board"
+            settingsMap["legal_moves"] = 1
+            settingsMap["sound_effects"] = 1
+        }
 
-        return settingsMap.ifEmpty { null }
+        return settingsMap
     }
 
 
@@ -196,7 +240,7 @@ class DbHandler
         db.execSQL(query)
         db.close()
     }
-    fun getAllTableNames():List<String>{
+    /*fun getAllTableNames():List<String>{
         val listOfNames = mutableListOf<String>()
         val db = this.readableDatabase
         val query = "SELECT name FROM sqlite_master WHERE type='table'"
@@ -212,5 +256,29 @@ class DbHandler
         cursor.close()
         db.close()
         return listOfNames
+    }*/
+
+    fun getAllTableNames(): List<String> {
+        val listOfOpeningNames = mutableListOf<String>()
+        val db = this.readableDatabase
+        val query = "SELECT opening_name FROM openings"
+        val cursor = db.rawQuery(query, null)
+
+        val openingNameColumnIndex = cursor.getColumnIndex("opening_name")
+
+        if (openingNameColumnIndex != -1) {
+            while (cursor.moveToNext()) {
+                val openingName = cursor.getString(openingNameColumnIndex)
+                listOfOpeningNames.add(openingName)
+            }
+        } else {
+            println("opening_name column missing")
+        }
+
+        cursor.close()
+        db.close()
+        return listOfOpeningNames.sorted()
     }
+
+
 }

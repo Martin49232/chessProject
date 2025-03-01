@@ -93,6 +93,8 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
             chessBoard.previousMovesMovedBackList = mutableListOf()
 
             if (chessBoard.dbHandler.getOpening(chessBoard.opening, (chessBoard.plyCounter)) != (chessBoard.fen.split(" "))[0]){
+                println(chessBoard.dbHandler.getOpening(chessBoard.opening, (chessBoard.plyCounter)))
+                println((chessBoard.fen.split(" "))[0])
                 chessBoard.notationTextView.text = ""
                 chessBoard.soundPlayer.playWrongSound()
                 squareFactory.addRedSquare(position)
