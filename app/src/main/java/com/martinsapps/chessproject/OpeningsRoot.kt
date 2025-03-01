@@ -119,7 +119,7 @@ class OpeningsRoot : AppCompatActivity() {
         }
 
         val imageButton = ImageButton(this).apply {
-            layoutParams = LinearLayout.LayoutParams(400, 400)
+            layoutParams = LinearLayout.LayoutParams((getScreenWidth()/2.8).toInt(), (getScreenWidth()/2.8).toInt())
             getImage(dbName)?.let { setImageResource(it) }
             scaleType = ImageView.ScaleType.FIT_CENTER
             if (color == 0){
@@ -127,7 +127,7 @@ class OpeningsRoot : AppCompatActivity() {
             }else{
                 setBackgroundResource(R.color.buttonMargin)
             }
-            setPadding(20,20,20,20)
+            setPadding((getScreenWidth()/56),(getScreenWidth()/56),(getScreenWidth()/56),(getScreenWidth()/56))
             setOnClickListener {
                 Toast.makeText(context, "Clicked: ${getName(dbName)}", Toast.LENGTH_SHORT).show()
             }

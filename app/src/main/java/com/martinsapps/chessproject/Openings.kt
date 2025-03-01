@@ -118,6 +118,19 @@ class Openings : AppCompatActivity() {
                 for (piece in chessBoard.pieces){
                     constraintLayout.removeView(piece)
                 }
+
+                if (chessBoard.notationTextView.text.isNotBlank()) {
+
+                    val words = chessBoard.notationTextView.text.split("\\s+".toRegex())
+
+                    if (words.size > 1) {
+                        val newText = words.dropLast(1).joinToString(" ")
+                        chessBoard.notationTextView.text = newText
+                    } else {
+                        chessBoard.notationTextView.text = ""
+                    }
+                }
+
                 chessBoard.pieces = mutableListOf()
                 greenSquareFactory.removeSquares()
                 chessBoard.soundPlayer.playMoveSound()
@@ -133,11 +146,13 @@ class Openings : AppCompatActivity() {
 
         moveForwardButton.setOnClickListener {
             if(chessBoard.previousMovesMovedBackList.size>0){
+                val previousFen = chessBoard.fen
                 chessBoard.fen= chessBoard.previousMovesMovedBackList.removeAt(chessBoard.previousMovesMovedBackList.size-1)
                 chessBoard.previousMovesList.add(chessBoard.fen)
                 for (piece in chessBoard.pieces){
                     constraintLayout.removeView(piece)
                 }
+                chessBoard.notationTextView.append(" "+chessBoard.getPlayedMoveAlgebraicWithPiece(previousFen, chessBoard.fen))
                 chessBoard.pieces = mutableListOf()
                 chessBoard.soundPlayer.playMoveSound()
                 greenSquareFactory.removeSquares()
