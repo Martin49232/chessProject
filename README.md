@@ -29,14 +29,14 @@ An Android device or emulator running Android 8.1 (Oreo) or higher\
    - Connect your Android device (or start an emulator) and run the project.
   
 2. ** APK Download: **
-   - [GITHUB release] (https://github.com/martin49232/chesproject/releases) download the latest release.
+   - [GITHUB release] (https://github.com/Martin49232/chessProject/releases) download the latest release.
    - Transfer APK to your Android device and install it through a package installer.
 
 ## Usage
 User needs to download the app. Than choose which side he wants to train for than chooses an opening and lets the magic happen.
 
 ## Documentation
-https://github.com/martin49232/chesproject/Maturitní_projekt_z_informatiky.pdf
+[DOCUMENTATION File](https://github.com/Martin49232/chessProject/blob/master/Maturitní_projekt_z_informatiky.pdf)
 
 ## Mit license
-https://github.com/martin49232/chesproject/LICENSE
+[LICENSE File](https://github.com/Martin49232/chessProject/blob/master/LICENSE)
