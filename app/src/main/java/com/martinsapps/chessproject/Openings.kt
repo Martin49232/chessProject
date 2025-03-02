@@ -4,20 +4,14 @@ package com.martinsapps.chessproject
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Point
-import android.media.Image
 import android.os.Build
 import android.os.Bundle
-import android.transition.Explode
-import android.util.Log
 import android.view.WindowInsets
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -40,7 +34,10 @@ class Openings : AppCompatActivity() {
         //enableEdgeToEdge()
         //enabling edge to edge braeks the code!!! I forgot and waster few hours
         supportActionBar?.hide()
-        changeTheAnnoyingBar()
+        /*val window = this.window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.statusBarColor = this.resources.getColor(R.color.panel)*/
 
 
 
@@ -99,6 +96,11 @@ class Openings : AppCompatActivity() {
         val title = findViewById<TextView>(R.id.title)
         title.text = openingName
 
+
+
+        /*
+        Takes care of the venet when user needs hint
+         */
         hintButton.setOnClickListener{
             greenSquareFactory.removeSquares()
             if (chessBoard.dbHandler.getOpening(chessBoard.opening, (chessBoard.plyCounter+1)).isNotBlank()){
@@ -110,6 +112,13 @@ class Openings : AppCompatActivity() {
                 }
             }
         }
+
+        /*
+        Button to go one move back and one move forward, there is some logic because
+        i keep a list of played moves and when you go back you need to not delete the list.
+        Only when you go back and play a new move the list gets deleted. Also I remove and add moves
+        To the notation text view that shows played moves so far.
+         */
 
         moveBackButton.setOnClickListener {
             if(chessBoard.previousMovesList.size-1>0) {
@@ -190,12 +199,6 @@ class Openings : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         chessBoard.soundPlayer.release()
-    }
-    private fun changeTheAnnoyingBar(){
-        val window = this.window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.statusBarColor = this.resources.getColor(R.color.panel)
     }
 
     private fun getScreenWidth(): Int {

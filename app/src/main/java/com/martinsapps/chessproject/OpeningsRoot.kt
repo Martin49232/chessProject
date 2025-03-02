@@ -2,14 +2,10 @@ package com.martinsapps.chessproject
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.content.res.Resources
-import android.graphics.Color
 import android.graphics.Point
-import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.WindowInsets
@@ -17,19 +13,11 @@ import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.martinsapps.chessproject.databinding.ActivityMainBinding
-import kotlin.properties.Delegates
 
 class OpeningsRoot : AppCompatActivity() {
 
@@ -61,9 +49,9 @@ class OpeningsRoot : AppCompatActivity() {
 
 
         val dbHandler = DbHandler(applicationContext, "openings.db", null, 1)
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        /*window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.statusBarColor = this.resources.getColor(R.color.panel)
+        window.statusBarColor = this.resources.getColor(R.color.panel)*/
         supportActionBar?.hide()
 
         val backButton = findViewById<ImageButton>(R.id.back)
@@ -85,6 +73,10 @@ class OpeningsRoot : AppCompatActivity() {
 
         val scrollViewLinearLayout = findViewById<LinearLayout>(R.id.scrollViewLinearLayout)
 
+        /*
+        adds buttons for each opening in the database table. There are rows of two that are
+        dynamically added.
+         */
 
         for (i in openings.indices step 2) {
             val rowLayout = LinearLayout(this).apply {
@@ -110,6 +102,11 @@ class OpeningsRoot : AppCompatActivity() {
         }
     }
 
+    /*
+    helper function that creates the imageButton. Its width and height are calculated based on
+    display metrics to make it more responsive
+     */
+
     private fun createItemView(dbName: String): View {
         val itemLayout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -132,7 +129,11 @@ class OpeningsRoot : AppCompatActivity() {
                 Toast.makeText(context, "Clicked: ${getName(dbName)}", Toast.LENGTH_SHORT).show()
             }
         }
-        imageButton.setOnClickListener {
+        /*
+        click listener to open the openings activity
+         */
+
+            imageButton.setOnClickListener {
             val intent = Intent(this, Openings::class.java)
             intent.putExtra("opening", dbName)
             intent.putExtra("color", color)
@@ -157,6 +158,9 @@ class OpeningsRoot : AppCompatActivity() {
         return itemLayout
     }
 
+    /*
+    adds a bit of space between each row for aesthetic purposes
+     */
     private fun spacerView(context: Context): View {
         return View(context).apply {
             layoutParams = LinearLayout.LayoutParams(0, 0, 1f)
@@ -164,6 +168,9 @@ class OpeningsRoot : AppCompatActivity() {
     }
 
 
+    /*
+    map of db names to real names. if more openings added TODO add text file or json
+     */
 
     private fun getName(dbName: String): String? {
         val names = mapOf(
@@ -195,6 +202,10 @@ class OpeningsRoot : AppCompatActivity() {
             "Name not found"
         }
     }
+
+    /*
+    The same. And in future TODO smaller images or think of smth else
+     */
 
     private fun getImage(dbName: String): Int? {
         val images = mapOf(

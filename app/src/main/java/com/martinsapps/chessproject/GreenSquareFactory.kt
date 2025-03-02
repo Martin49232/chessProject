@@ -1,24 +1,18 @@
 package com.martinsapps.chessproject
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
-import android.view.animation.Animation.AnimationListener
-import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import java.io.IOException
 
 
 class GreenSquareFactory(context: Context, constraintLayout: ConstraintLayout, chessBoard: ChessBoard) {
@@ -27,7 +21,7 @@ class GreenSquareFactory(context: Context, constraintLayout: ConstraintLayout, c
     private val constraintLayout: ConstraintLayout
     private val chessBoard: ChessBoard
     init {
-        this.greenSquareList = mutableListOf<ImageView>()
+        this.greenSquareList = mutableListOf()
         this.context = context
         this.constraintLayout = constraintLayout
         this.chessBoard = chessBoard
@@ -39,26 +33,30 @@ class GreenSquareFactory(context: Context, constraintLayout: ConstraintLayout, c
      */
 
     fun addHollowCircle(squareNumber: Int){
+        val settings = chessBoard.dbHandler.getSettings()
+        val legalMoves = settings["legal_moves"].toString().toInt()
+        if (legalMoves == 1){
         val hollowCircleImageView = ImageView(context)
         hollowCircleImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.map_circle_green))
         hollowCircleImageView.y = this.chessBoard.squareCoordinates[squareNumber][1].toFloat()
         hollowCircleImageView.x = this.chessBoard.squareCoordinates[squareNumber][0].toFloat()
-        hollowCircleImageView.setAlpha(100)
+        hollowCircleImageView.alpha = 100 / 255f
         constraintLayout.addView(hollowCircleImageView)
         hollowCircleImageView.layoutParams.height = chessBoard.squareSize
         hollowCircleImageView.layoutParams.width = chessBoard.squareSize
         greenSquareList.add(hollowCircleImageView)
+        }
     }
 
     fun addDot(squareNumber: Int){
-        val settings = chessBoard.dbHandler.getSettings() ?: throw IOException()
+        val settings = chessBoard.dbHandler.getSettings()
         val legalMoves = settings["legal_moves"].toString().toInt()
         if (legalMoves == 1){
             val dotImageView = ImageView(context)
             dotImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.dot_green))
             dotImageView.y = this.chessBoard.squareCoordinates[squareNumber][1].toFloat()+chessBoard.squareSize/3
             dotImageView.x = this.chessBoard.squareCoordinates[squareNumber][0].toFloat()+chessBoard.squareSize/3
-            dotImageView.setAlpha(100)
+            dotImageView.alpha = 100 / 255f
             constraintLayout.addView(dotImageView)
             dotImageView.layoutParams.height = chessBoard.squareSize/3
             dotImageView.layoutParams.width = chessBoard.squareSize/3

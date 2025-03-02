@@ -1,5 +1,7 @@
 package com.martinsapps.chessproject
 
+import android.annotation.SuppressLint
+import android.app.ActivityOptions
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
@@ -9,14 +11,10 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowInsets
-import android.view.WindowManager
 import android.widget.ImageButton
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.drawable.DrawableCompat
 import com.martinsapps.chessproject.databinding.ActivityMainBinding
 import java.io.File
@@ -34,6 +32,7 @@ import kotlin.math.exp
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -46,12 +45,12 @@ class MainActivity : AppCompatActivity() {
         //    androidx.appcompat.R.anim.abc_popup_enter,
         //    abc_popup_exit
         //)
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        /*window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.statusBarColor = this.resources.getColor(R.color.panel)
+        window.statusBarColor = this.resources.getColor(R.color.panel)*/
         supportActionBar?.hide()
-        val screenWidth = getScreenWidth()
-        val screenHeight = getScreenHeight()
+        //val screenWidth = getScreenWidth()
+        //val screenHeight = getScreenHeight()
 
 
         /*
@@ -75,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         val blackOpenings = findViewById<ImageButton>(R.id.black)
         blackOpenings.setOnClickListener {
             val intent = Intent(this, OpeningsRoot::class.java)
-            intent.putExtra("color", 1);
+            intent.putExtra("color", 1)
             this.startActivity(intent)
             finish()
         }

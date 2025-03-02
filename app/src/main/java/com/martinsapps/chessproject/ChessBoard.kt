@@ -1,10 +1,6 @@
 package com.martinsapps.chessproject
 
 import android.content.Context
-import android.content.res.Resources
-import android.graphics.Point
-import android.os.Build
-import android.view.WindowInsets
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -200,24 +196,31 @@ class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: I
 
         var fromSquare: Int? = null
         var toSquare: Int? = null
+        //white short castle
+        if (board1[60] == 'K' && board2[60] == '1' && board2[62] == 'K') {
+            if (color == 1){
+                return intArrayOf(63-60, 0)
+            }
+            return intArrayOf(60, 63)
 
-        var move = intArrayOf(0,0)
-        if (board1[60] == 'K' && board2[62] == 'K' && board2[61] == 'R') {
-            move = intArrayOf(60, 63)
-        } else if (board1[60] == 'K' && board2[58] == 'K' && board2[59] == 'R') {
-            move = intArrayOf(60, 56)
-        }
-        else if (board1[4] == 'k' && board2[6] == 'k' && board2[5] == 'r') {
-            move = intArrayOf(4, 7)
-        } else if (board1[4] == 'k' && board2[2] == 'k' && board2[3] == 'r') {
-            move = intArrayOf(4, 0)
-        }
-        if (color == 1){
-            move = intArrayOf(63-move[0], 63-move[1])
-            return move
-        }
-        if (move[0] != 0 && move[1]!=0){
-            return move
+            //black short castle
+        } else if (board1[4] == 'k' && board2[4] == '1' && board2[6] == 'k') {
+            if (color == 1){
+                return intArrayOf(63-4, 63-7)
+            }
+            return intArrayOf(4, 7)
+            //white long castle
+        } else if (board1[60] == 'K' && board2[60] == '1' && board2[58] == 'K') {
+            if (color == 1){
+                return intArrayOf(63-60, 63-56)
+            }
+            return intArrayOf(60, 56)
+            //black long castle
+        } else if (board1[4] == 'k' && board2[4] == '1' && board2[2] == 'k') {
+            if (color == 1){
+                return intArrayOf(63-4, 63)
+            }
+            return intArrayOf(4, 0)
         }
 
 

@@ -5,43 +5,30 @@ import android.content.Context
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import kotlin.math.ceil
-import kotlin.math.floor
 
-class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,color: Int,  chessBoard: ChessBoard,
-                 private val squareFactory: GreenSquareFactory
+class ChessPiece(
+    private val ID: Int, private val context: Context,
+    private val constraintLayout: ConstraintLayout,
+    private val color: Int, private val chessBoard: ChessBoard,
+    private val squareFactory: GreenSquareFactory
 ) {
 
-    private val context: Context
-    private val ID: Int
-    val imageView: ImageView
-    private val constraintLayout: ConstraintLayout
-    private val chessBoard: ChessBoard
-    private val color: Int
-
-    init {
-        this.color = color
-        this.ID = ID
-        this.context = context
-        this.imageView = ImageView(context)
-        this.constraintLayout = constraintLayout
-        this.chessBoard = chessBoard
-    }
+    private val imageView: ImageView = ImageView(context)
 
     companion object {
-        const val BLACK_KING = R.drawable.black_king
-        const val BLACK_QUEEN = R.drawable.black_queen
-        const val BLACK_BISHOP = R.drawable.black_bishop
-        const val BLACK_KNIGHT = R.drawable.black_knight
-        const val BLACK_ROOK = R.drawable.black_rook
-        const val BLACK_PAWN = R.drawable.black_pawn
+        val BLACK_KING = R.drawable.black_king
+        val BLACK_QUEEN = R.drawable.black_queen
+        val BLACK_BISHOP = R.drawable.black_bishop
+        val BLACK_KNIGHT = R.drawable.black_knight
+        val BLACK_ROOK = R.drawable.black_rook
+        val BLACK_PAWN = R.drawable.black_pawn
 
-        const val WHITE_KING = R.drawable.white_king
-        const val WHITE_QUEEN = R.drawable.white_queen
-        const val WHITE_BISHOP = R.drawable.white_bishop
-        const val WHITE_KNIGHT = R.drawable.white_knight
-        const val WHITE_ROOK = R.drawable.white_rook
-        const val WHITE_PAWN = R.drawable.white_pawn
+        val WHITE_KING = R.drawable.white_king
+        val WHITE_QUEEN = R.drawable.white_queen
+        val WHITE_BISHOP = R.drawable.white_bishop
+        val WHITE_KNIGHT = R.drawable.white_knight
+        val WHITE_ROOK = R.drawable.white_rook
+        val WHITE_PAWN = R.drawable.white_pawn
     }
 
 
@@ -246,17 +233,17 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
                     constraintLayout
                 )
                 chessBoard.moves = chessBoard.pseudoLegalMoves(chessBoard.fen)
-                val pseudoLegalMoves = mutableListOf<Move>()
-                var position = 0
+                val pseudoLegalPieceMoves = mutableListOf<Move>()
+                var piecePosition = 0
                 for (i in 0 until chessBoard.squareCoordinates.size) {
                     if (this.imageView.x.toInt() == chessBoard.squareCoordinates[i][0] && getImageViewY(this.imageView).toInt() == chessBoard.squareCoordinates[i][1]) {
-                        position = i
+                        piecePosition = i
                     }
                 }
                 //printing legal moves signs
                 for (move in chessBoard.moves) {
-                    if (move.from == position) {
-                        pseudoLegalMoves.add(move)
+                    if (move.from == piecePosition) {
+                        pseudoLegalPieceMoves.add(move)
                         when(move.flag){
                             Move.QUIET_MOVES->squareFactory.addDot(move.where)
                             Move.DOUBLE_PAWN_PUSH->squareFactory.addDot(move.where)
@@ -306,7 +293,7 @@ class ChessPiece(ID: Int, context: Context, constraintLayout:ConstraintLayout,co
         }
     }
 
-    fun getImageViewY(imageView: ImageView): Float {
+    private fun getImageViewY(imageView: ImageView): Float {
         return (imageView.y)
     }
 }

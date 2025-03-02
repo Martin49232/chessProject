@@ -6,20 +6,10 @@ import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowInsets
-import android.view.WindowManager
 import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.Switch
-import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.google.android.material.textfield.TextInputLayout
 import com.martinsapps.chessproject.databinding.ActivityMainBinding
-import java.io.IOException
 
 class Settings : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -38,13 +28,11 @@ class Settings : AppCompatActivity() {
         //    insets
         //}
 
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        /*window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.statusBarColor = this.resources.getColor(R.color.panel)
+        window.statusBarColor = this.resources.getColor(R.color.panel)*/
         supportActionBar?.hide()
 
-        val screenWidth = getScreenWidth()
-        val screenHeight = getScreenHeight()
 
         val backButton = findViewById<ImageButton>(R.id.back)
         backButton.setOnClickListener {
@@ -60,7 +48,7 @@ class Settings : AppCompatActivity() {
         val legalMovesSwitch = findViewById<SwitchCompat>(R.id.switch_legal_moves)
         val soundEffectsSwitch = findViewById<SwitchCompat>(R.id.switch_sound_effects)
 
-        val settings = dbHandler.getSettings() ?: throw IOException()
+        val settings = dbHandler.getSettings()
        // val theme = settings["chessboard"]
         val legalMoves = settings["legal_moves"]
         val soundEffects = settings["sound_effects"]
@@ -75,30 +63,30 @@ class Settings : AppCompatActivity() {
 
 
         legalMovesSwitch.setOnClickListener{
-            val settings = dbHandler.getSettings() ?: throw IOException()
-            val theme = settings["chessboard"].toString()
-            var legalMoves = settings["legal_moves"].toString().toInt()
-            val soundEffects = settings["sound_effects"].toString().toInt()
-            legalMoves = if (legalMoves == 1){
+            val settingsSwitch = dbHandler.getSettings()
+            val themeSetting = settingsSwitch["chessboard"].toString()
+            var legalMovesSetting = settingsSwitch["legal_moves"].toString().toInt()
+            val soundEffectsSetting = settingsSwitch["sound_effects"].toString().toInt()
+            legalMovesSetting = if (legalMovesSetting == 1){
                 0
             }else{
                 1
             }
 
-            dbHandler.updateSettings(theme, legalMoves, soundEffects)
+            dbHandler.updateSettings(themeSetting, legalMovesSetting, soundEffectsSetting)
         }
         soundEffectsSwitch.setOnClickListener{
-            val settings = dbHandler.getSettings() ?: throw IOException()
-            val theme = settings["chessboard"].toString()
-            val legalMoves = settings["legal_moves"].toString().toInt()
-            var soundEffects = settings["sound_effects"].toString().toInt()
-            soundEffects = if (soundEffects == 1){
+            val settingsSwitch = dbHandler.getSettings()
+            val themeSetting = settingsSwitch["chessboard"].toString()
+            val legalMovesSetting = settingsSwitch["legal_moves"].toString().toInt()
+            var soundEffectsSetting = settingsSwitch["sound_effects"].toString().toInt()
+            soundEffectsSetting = if (soundEffectsSetting == 1){
                 0
             }else{
                 1
             }
 
-            dbHandler.updateSettings(theme, legalMoves, soundEffects)
+            dbHandler.updateSettings(themeSetting, legalMovesSetting, soundEffectsSetting)
         }
 
     }
