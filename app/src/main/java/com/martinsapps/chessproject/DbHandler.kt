@@ -66,7 +66,7 @@ class DbHandler
 
 
 
-    fun getSettings(): Map<String, Any>? {
+    fun getSettings(): Map<String, Any> {
         val db = this.readableDatabase
         val settingsMap = mutableMapOf<String, Any>()
 

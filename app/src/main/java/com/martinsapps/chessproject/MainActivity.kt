@@ -219,8 +219,7 @@ class MainActivity : AppCompatActivity() {
     private fun copyDataBase() {
         try {
             val mInput: InputStream = applicationContext.assets.open("openings.db")
-            val outFileName: String =
-                "/data/data/com.martinsapps.chessproject/databases/" + "openings.db"
+            val outFileName: String = applicationContext.getDatabasePath("openings.db").path
             val mOutput: OutputStream = FileOutputStream(outFileName)
             val mBuffer = ByteArray(1024)
             var mLength: Int

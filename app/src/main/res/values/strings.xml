@@ -10,7 +10,7 @@
     <string name="title">Openingo</string>
     <string name="openings_root">Choose an opening</string>
     <string name="settings_moves">Show Legal Moves</string>
-    <string name="settings_sound">Choose an opening</string>
+    <string name="settings_sound">Play Sounds</string>
     <string name="streak_icon">Streak icon</string>
     <string name="settings_title">Settings</string>
     <string name="last_played">Last played opening</string>
