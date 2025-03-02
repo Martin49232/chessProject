@@ -1,5 +1,7 @@
-# High School Practical Thesis - Android application aims to help with the process of memorization of chess openings
+# Openingo
 
+## Overview
+High School Practical Thesis - Android application aims to help with the process of memorization of chess openings\
 Aplication was developed as part of a High School Practical Thesis by Martin Vanko (4.C, gymnasium Jana Keplera, 2025).
 
 ## Used technologies
