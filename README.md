@@ -37,3 +37,6 @@ User needs to download the app. Than choose which side he wants to train for tha
 
 ## Documentation
 https://github.com/martin49232/chesproject/Maturitní_projekt_z_informatiky.pdf
+
+## Mit license
+https://github.com/martin49232/chesproject/LICENSE
