@@ -1,7 +1,6 @@
 package com.martinsapps.chessproject
 
 import android.annotation.SuppressLint
-import android.app.ActivityOptions
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
