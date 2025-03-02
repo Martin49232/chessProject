@@ -17,4 +17,6 @@
     <color name="button">#86A94B</color>
     <color name="buttonMargin">#444444</color>
     <color name="icon_background">#CBDDD1</color>
+    <color name="nice_blue">#0093AF</color>
+    <color name="hint_blue">#008080</color>
 </resources>

@@ -201,16 +201,51 @@ class ChessBoard(color: Int, context: Context, screenWidth: Int, screenHeight: I
         var fromSquare: Int? = null
         var toSquare: Int? = null
 
-
-        if (board1[60] == 'K' && board2[60] == '1' && board2[62] == 'K') {
-            return if (color == 0) intArrayOf(60, 63) else intArrayOf(4, 7)
-        } else if (board1[4] == 'k' && board2[4] == '1' && board2[6] == 'k') {
-            return if (color == 0) intArrayOf(4, 7) else intArrayOf(60, 63)
-        } else if (board1[60] == 'K' && board2[60] == '1' && board2[58] == 'K') {
-            return if (color == 0) intArrayOf(60, 56) else intArrayOf(4, 1)
-        } else if (board1[4] == 'k' && board2[4] == '1' && board2[2] == 'k') {
-            return if (color == 0) intArrayOf(4, 1) else intArrayOf(60, 56)
+        var move = intArrayOf(0,0)
+        if (board1[60] == 'K' && board2[62] == 'K' && board2[61] == 'R') {
+            move = intArrayOf(60, 63)
+        } else if (board1[60] == 'K' && board2[58] == 'K' && board2[59] == 'R') {
+            move = intArrayOf(60, 56)
         }
+        else if (board1[4] == 'k' && board2[6] == 'k' && board2[5] == 'r') {
+            move = intArrayOf(4, 7)
+        } else if (board1[4] == 'k' && board2[2] == 'k' && board2[3] == 'r') {
+            move = intArrayOf(4, 0)
+        }
+        if (color == 1){
+            move = intArrayOf(63-move[0], 63-move[1])
+            return move
+        }
+        if (move[0] != 0 && move[1]!=0){
+            return move
+        }
+
+
+        /*if (color == 0) {
+            if (board1[60] == 'K' && board2[62] == 'K' && board2[61] == 'R') {
+                return intArrayOf(60, 63)
+            } else if (board1[60] == 'K' && board2[58] == 'K' && board2[59] == 'R') {
+                return intArrayOf(60, 56)
+            }
+            else if (board1[4] == 'k' && board2[6] == 'k' && board2[5] == 'r') {
+                return intArrayOf(4, 7)
+            } else if (board1[4] == 'k' && board2[2] == 'k' && board2[3] == 'r') {
+                return intArrayOf(4, 0)
+            }
+
+        } else {
+            if (board1[3] == 'K' && board2[1] == 'K' && board2[2] == 'R') {
+                return intArrayOf(3, 0)
+            } else if (board1[3] == 'K' && board2[5] == 'K' && board2[4] == 'R') {
+                return intArrayOf(3, 7)
+            }
+            else if (board1[59] == 'k' && board2[57] == 'k' && board2[58] == 'r') {
+                return intArrayOf(59, 56)
+            } else if (board1[59] == 'k' && board2[61] == 'k' && board2[60] == 'r') {
+                return intArrayOf(59, 63)
+            }
+
+        }*/
 
 
 

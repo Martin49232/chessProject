@@ -1,6 +1,10 @@
 package com.martinsapps.chessproject
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
+import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
 import android.view.View
@@ -8,9 +12,12 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
+import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import java.io.IOException
 
 
@@ -36,7 +43,7 @@ class GreenSquareFactory(context: Context, constraintLayout: ConstraintLayout, c
         hollowCircleImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.map_circle_green))
         hollowCircleImageView.y = this.chessBoard.squareCoordinates[squareNumber][1].toFloat()
         hollowCircleImageView.x = this.chessBoard.squareCoordinates[squareNumber][0].toFloat()
-        hollowCircleImageView.setAlpha(60)
+        hollowCircleImageView.setAlpha(100)
         constraintLayout.addView(hollowCircleImageView)
         hollowCircleImageView.layoutParams.height = chessBoard.squareSize
         hollowCircleImageView.layoutParams.width = chessBoard.squareSize
@@ -51,7 +58,7 @@ class GreenSquareFactory(context: Context, constraintLayout: ConstraintLayout, c
             dotImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.dot_green))
             dotImageView.y = this.chessBoard.squareCoordinates[squareNumber][1].toFloat()+chessBoard.squareSize/3
             dotImageView.x = this.chessBoard.squareCoordinates[squareNumber][0].toFloat()+chessBoard.squareSize/3
-            dotImageView.setAlpha(60)
+            dotImageView.setAlpha(100)
             constraintLayout.addView(dotImageView)
             dotImageView.layoutParams.height = chessBoard.squareSize/3
             dotImageView.layoutParams.width = chessBoard.squareSize/3
@@ -92,6 +99,9 @@ class GreenSquareFactory(context: Context, constraintLayout: ConstraintLayout, c
     fun addGreenSquare(squareNumber: Int){
         val greenSquareImageView = ImageView(context)
         greenSquareImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.green_square))
+        val color = ContextCompat.getColor(context, R.color.nice_blue)
+        greenSquareImageView.colorFilter = null
+        greenSquareImageView.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN)
         greenSquareImageView.x = this.chessBoard.squareCoordinates[squareNumber][0].toFloat()
         greenSquareImageView.y = this.chessBoard.squareCoordinates[squareNumber][1].toFloat()
         //greenSquareImageView.alpha = 2F
@@ -107,4 +117,18 @@ class GreenSquareFactory(context: Context, constraintLayout: ConstraintLayout, c
         }
         this.greenSquareList = mutableListOf()
     }
+
+    private fun changeSvgFillColor(imageView: ImageView, svgDrawableRes: Int, color: Int) {
+        val drawable: Drawable? =
+            AppCompatResources.getDrawable(imageView.context, svgDrawableRes)
+
+        if (drawable != null) {
+            val wrappedDrawable = DrawableCompat.wrap(drawable)
+            DrawableCompat.setTint(wrappedDrawable, color)
+
+            imageView.setImageDrawable(wrappedDrawable)
+        }
+    }
+
+
 }

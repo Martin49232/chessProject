@@ -78,19 +78,19 @@
             app:srcCompat="@drawable/svglogo" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
     <TextView
         android:id="@+id/text_legal_moves"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="44dp"
         android:text="@string/settings_moves"
         android:textColor="?attr/colorOnBackground"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@id/switch_legal_moves"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleLayout" />
-
+        app:layout_constraintTop_toBottomOf="@id/text_sound_effects" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/switch_legal_moves"
